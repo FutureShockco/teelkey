@@ -22,7 +22,7 @@ export LOG_LEVEL=debug
 export REPLAY_OUTPUT=100
 
 # default peers to connect with on startup
-export PEERS=ws://35.203.37.221:6001
+#export PEERS=ws://35.203.37.221:6001
 
 # your user and keys (only useful for active node owners)
 export NODE_OWNER=observer-node

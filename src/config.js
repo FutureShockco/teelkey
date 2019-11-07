@@ -10,7 +10,7 @@ var config = {
             accountMaxLength: 50,
             accountMinLength: 1,
             assetMinLength: 3,
-            assetMaxLength: 5,
+            assetMaxLength: 7,
             assetAlphabet: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
             // allowed username chars
             allowedUsernameChars: 'abcdefghijklmnopqrstuvwxyz0123456789',
@@ -73,7 +73,7 @@ var config = {
             // the maximum number of mentions triggering a notification
             notifMaxMentions: 10,
             // the fake hash of block 0 (new origin hash -> new chain)
-            originHash: '0000000000000000000000000000000000000000000000000000000000000035',
+            originHash: '0000000000000000000000000000000000000000000000000000000000000070',
             randomBytesLength: 32,
             // the minimum hourly reward pool (including leader rewards)
             rewardPoolMin: 1,
