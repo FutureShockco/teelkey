@@ -1,5 +1,5 @@
 const default_port = 6001
-const replay_interval = 1500
+const replay_interval = 5000
 const discovery_interval = 60000
 const max_blocks_buffer = 100
 var p2p_port = process.env.P2P_PORT || default_port
@@ -94,6 +94,7 @@ var p2p = {
         ws.on('message', (data) => {
             //var user = p2p.sockets[p2p.sockets.indexOf(ws)].node_status ? p2p.sockets[p2p.sockets.indexOf(ws)].node_status.owner : 'unknown'
             //logr.trace('P2P-IN:', user, data)
+            //console.log(data)
             try {
                 var message = JSON.parse(data)
             } catch(e) {

@@ -33,7 +33,7 @@ module.exports = {
         })
     },
     execute: (tx, ts, cb) => {
-        // add funds to receiver
+        // add unique to receiver
         cache.updateOne('accounts', 
             {name: tx.data.receiver},
             {$push: {nft: tx.data.id}},
@@ -43,7 +43,7 @@ module.exports = {
                     return
                 }
                 
-                // remove funds from sender
+                // remove unique from sender
                 cache.updateOne('accounts', 
                     {name: tx.sender},
                     {$pull: {nft: tx.data.id}},

@@ -16,7 +16,7 @@ var transactions = [
     require('./transferVt.js'),
     require('./transferBw.js'),
     require('./transferAsset.js'),
-    require('./transferNft')
+    require('./transferNft.js')
 ]
 
 module.exports = {
@@ -37,7 +37,8 @@ module.exports = {
         PROMOTED_COMMENT: 13,
         TRANSFER_VT: 14,
         TRANSFER_BW: 15,
-        TRANSFER_ASSET: 16
+        TRANSFER_ASSET: 16,
+        TRANSFER_NFT: 17
     },
     validate: (tx, ts, legitUser, cb) => {
         // will make sure the transaction type exists (redondant ?)

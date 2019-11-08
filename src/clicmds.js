@@ -144,7 +144,7 @@ let cmds = {
 
     transferNft: (privKey, sender, receiver, id, memo) => {
         if (!memo) memo=''
-        var tx = '{"type":16,"data":{"receiver":"'+
+        var tx = '{"type":17,"data":{"receiver":"'+
 			receiver+'", "id":"'+id+'", "memo":"'+memo+'"}}'
         return sign(privKey, sender, tx)
     },
