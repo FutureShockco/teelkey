@@ -141,6 +141,13 @@ let cmds = {
 			parseInt(amount)+', "asset":"'+asset+'", "memo":"'+memo+'"}}'
         return sign(privKey, sender, tx)
     },
+
+    transferNft: (privKey, sender, receiver, id, memo) => {
+        if (!memo) memo=''
+        var tx = '{"type":16,"data":{"receiver":"'+
+			receiver+'", "id":"'+id+'", "memo":"'+memo+'"}}'
+        return sign(privKey, sender, tx)
+    },
 }
 
 module.exports = cmds

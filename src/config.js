@@ -12,6 +12,9 @@ var config = {
             assetMinLength: 3,
             assetMaxLength: 7,
             assetAlphabet: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
+            nftMinLength: 3,
+            nftMaxLength: 50,
+            nftAlphabet: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
             // allowed username chars
             allowedUsernameChars: 'abcdefghijklmnopqrstuvwxyz0123456789',
             allowedUsernameCharsOnlyMiddle: '-.',
@@ -61,7 +64,7 @@ var config = {
             // if false master can create accounts with usernames without burning tokens
             masterPaysForUsernames: false,
             // the master account public original key
-            masterPub: '21NuxpQXQQ2ujxepDekTKcsLed7m44yf5aKiA8VYHZAk7',
+            masterPub: '24F6Lqr1vhph1CdhiS1ATRY58udtGARjoYP2FdmV93kfN',
             // the maximum time drift in ms before a transaction is invalid
             maxDrift: 200,
             // the max length of a transfer memo
@@ -73,7 +76,7 @@ var config = {
             // the maximum number of mentions triggering a notification
             notifMaxMentions: 10,
             // the fake hash of block 0 (new origin hash -> new chain)
-            originHash: '0000000000000000000000000000000000000000000000000000000000000070',
+            originHash: '0000000000000000000000000000000000000000000000000000000000000020',
             randomBytesLength: 32,
             // the minimum hourly reward pool (including leader rewards)
             rewardPoolMin: 1,

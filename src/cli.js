@@ -240,6 +240,18 @@ program.command('transfer-asset <receiver> <amount> <asset> [memo]')
         writeLine('  $ xfer-asset bob 777 XBTC -F key.json -M alice')
     })
 
+program.command('transfer-nft <receiver> <id> [memo]')
+    .alias('xfer-nft')
+    .description('transfer nft')
+    .action(function(receiver, id, memo) {
+        verifyKeyAndUser()
+        sendTx(cmds.transferNft(program.key, program.me, receiver, id, memo))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ xfer-nft bob nftUniqueID -F key.json -M alice')
+    })
+
 program.command('transfer-bw <receiver> <amount>')
     .alias('xfer-bw')
     .description('transfer bandwidth')

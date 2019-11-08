@@ -15,7 +15,8 @@ var transactions = [
     require('./promotedComment.js'),
     require('./transferVt.js'),
     require('./transferBw.js'),
-    require('./transferAsset.js')
+    require('./transferAsset.js'),
+    require('./transferNft')
 ]
 
 module.exports = {
