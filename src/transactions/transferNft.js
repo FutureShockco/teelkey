@@ -14,7 +14,7 @@ module.exports = {
             cb(false, 'invalid tx cannot send to self'); return
         }
 
-        // master mints tokens
+        // master mints nfts
         if (tx.sender === config.masterName) {
             cb(true)
             return
@@ -36,7 +36,7 @@ module.exports = {
         // add unique to receiver
         cache.updateOne('accounts', 
             {name: tx.data.receiver},
-            {$push: {nft: tx.data.id}},
+            {$push: {nfts: tx.data.id}},
             function() {
                 if (tx.sender === config.masterName) {
                     cb(true)
@@ -46,12 +46,12 @@ module.exports = {
                 // remove unique from sender
                 cache.updateOne('accounts', 
                     {name: tx.sender},
-                    {$pull: {nft: tx.data.id}},
+                    {$pull: {nfts: tx.data.id}},
                     function() {
                         cb(true)
                     }
                 )
             })
-        
+
     }
 }
