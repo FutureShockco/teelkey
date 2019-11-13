@@ -168,6 +168,17 @@ program.command('profile <json>')
         writeLine('  $ profile \'{"profile":{"avatar":"https://i.imgur.com/4Bx2eQt.jpg"}}\' -F key.json -M bob')
     })
 
+program.command('master-json <target> <json>')
+    .description('modify an account masterjson')
+    .action(function(json) {
+        verifyKeyAndUser()
+        sendTx(cmds.masterJson(program.key, program.me, json))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ master-json alice \'{"socials":[{"facebook":"fb_id"}]}\' -F key.json -M master')
+    })
+
 program.command('promote <link> <pa> <pp> <json> <vt> <tag> <burn>')
     .description('publish and promote')
     .action(function(link, pa, pp, json, vt, tag, burn) {

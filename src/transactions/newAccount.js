@@ -41,6 +41,7 @@ module.exports = {
     execute: (tx, ts, cb) => {
         cache.insertOne('accounts', {
             name: tx.data.name.toLowerCase(),
+            created:ts,
             pub: tx.data.pub,
             balance: 0,
             bw: {v:0,t:0},

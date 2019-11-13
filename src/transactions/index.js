@@ -6,6 +6,7 @@ var transactions = [
     require('./comment.js'),
     require('./vote.js'),
     require('./userJson.js'),
+    require('./userMasterJson.js'),
     require('./follow.js'),
     require('./unfollow.js'),
     null,
@@ -38,7 +39,8 @@ module.exports = {
         TRANSFER_VT: 14,
         TRANSFER_BW: 15,
         TRANSFER_ASSET: 16,
-        TRANSFER_NFT: 17
+        TRANSFER_NFT: 17,
+        USER_MASTER_JSON: 18
     },
     validate: (tx, ts, legitUser, cb) => {
         // will make sure the transaction type exists (redondant ?)
