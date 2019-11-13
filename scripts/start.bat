@@ -10,25 +10,24 @@ setx DB_NAME "teelkey"
 setx DB_URL "mongodb://localhost:27017" 
 
 ::Peering configuration
-setx OFFLINE "1" 
-setx NO_DISCOVERY "1" 
+::setx OFFLINE "0" 
+::setx NO_DISCOVERY "0" 
 
 ::Disabling notifications
-setx NOTIFICATIONS "0" 
+::setx NOTIFICATIONS "0" 
 
 ::trace / debug / info / warn
-setx LOG_LEVEL "debug" 
+setx LOG_LEVEL "trace" 
 
 ::groups blocks during replay output to lower screen spam
-setx REPLAY_OUTPUT "100" 
+setx REPLAY_OUTPUT "1" 
 
 ::default peers to connect with on startup
-setx PEERS ""
-
+setx PEERS "ws://134.209.175.86:6001"
 ::your user and keys (only useful for active node owners)
-setx NODE_OWNER "observer-node"
-setx NODE_OWNER_PUB "22BgwzFfgepRU3xBHvkBPZmgwy2syjNagopAoKpzb65p2" 
-setx NODE_OWNER_PRIV "H6xtpcnQFCRQPvnxknjqySzVdYPXojkvTgbR8wTVp1jd"
+setx NODE_OWNER "observer"
+setx NODE_OWNER_PUB "21NuxpQXQQ2ujxepDekTKcsLed7m44yf5aKiA8VYHZAk7" 
+setx NODE_OWNER_PRIV "34EpMEDFJwKbxaF7FhhLyEe3AhpM4dwHMLVfs4JyRto5"
 
 ::src path
 cd "C:\Users\hight\Desktop\teelkey\src"
