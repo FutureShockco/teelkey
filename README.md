@@ -37,11 +37,6 @@ You can use the CLI tool to transact with teelkey. Simply try `node src/cli --he
 ### Using TeelkeyJS
 [TeelkeyJS](https://www.npmjs.com/package/teelkeyjs) is the javascript wrapper for teelkey's API. Working on both browser and nodejs.
 
-### SERVE A STATIC APP
-Put your static app into the public repository and it will be served over your nodes:
-Examples:
-https://teelkey.com/
-
 ### HTTP API
 
 Teelkey's API uses 100% JSON. The GET calls will allow you to fetch the public information which is already available through most of existent UI.
@@ -205,6 +200,11 @@ curl http://localhost:9200/teelkey.contents/_search?q=football
 curl http://localhost:9200/teelkey.accounts/_search?q=satoshi
 ```
 Please refer to Elastic Search documentation for more complex queries.
+
+### Serve a static app
+Put your static app into the public repository and it will be served over your nodes:
+Examples:
+https://teelkey.com/
 
 ### Credits
 We would like to give all the credits to the people making available these resources.
