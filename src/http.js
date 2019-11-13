@@ -8,13 +8,20 @@ const ogs = require('open-graph-scraper')
 const series = require('run-series')
 const transaction = require('./transaction.js')
 
+var path = require('path');
+var public = path.join(__dirname, '../public');
+
 var http = {
     init: () => {
         var app = express()
         app.use(cors())
         app.use(bodyParser.json())
+        app.use('/', express.static(public));
 
-        // fetch a single block
+        app.get('/', function(req, res) {
+            res.sendFile(path.join(public, 'index.html'));
+        });
+                // fetch a single block
         app.get('/block/:number', (req, res) => {
             var blockNumber = parseInt(req.params.number)
             db.collection('blocks').findOne({_id: blockNumber}, function(err, block) {
