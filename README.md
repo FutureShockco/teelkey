@@ -16,7 +16,7 @@
 * `./scripts/start.sh`
 
 ### Environment Variables
-The `start.sh` shows the list of available environment variables you can set to make avalon behave slightly differently from the default install.
+The `start.sh` shows the list of available environment variables you can set to make teelkey behave slightly differently from the default install.
 
 ### Resetting and replaying the chain
 
