@@ -37,12 +37,17 @@ You can use the CLI tool to transact with teelkey. Simply try `node src/cli --he
 ### Using TeelkeyJS
 [TeelkeyJS](https://www.npmjs.com/package/teelkeyjs) is the javascript wrapper for teelkey's API. Working on both browser and nodejs.
 
+### SERVE A STATIC APP
+Put your static app into the public repository and it will be served over your nodes:
+Examples:
+https://teelkey.com/
+
 ### HTTP API
 
 Teelkey's API uses 100% JSON. The GET calls will allow you to fetch the public information which is already available through most of existent UI.
 
 Examples:
-* Account data: /account/:username, i.e https://teelkey/account/master
+* Account data: /account/:username, i.e https://teelkey.com/account/master
 
 ### Transacting (POST /transact)
 Once you have an account and balance, your account will start generating bandwidth and voting power (respectively the bw and vt fields in your account data). You can consume those ressources by transacting.
