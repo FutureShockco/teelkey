@@ -106,6 +106,26 @@ node src/cli.js transfer-nft -K <bob_key> -M <user> <receiver> <id> <memo>
 node src/cli.js transfer-nft -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob charles unique_id 'thank you'
 ```
 
+#### Buy asset
+* *price*: buy price of each tokens.
+* *amount*: number of tokens to buy.
+* *asset*: arbitrary short asset ticker.
+```
+node src/cli.js buy 1 10 DWD -K <bob_key> -M <user> 
+// bob buy 10 DWD for 1 token each.
+node src/cli.js buy 1 10 DWD -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob
+```
+
+#### Sell asset
+* *price*: sell price of each tokens.
+* *amount*: number of tokens to sell.
+* *asset*: arbitrary short asset ticker.
+```
+node src/cli.js sell 1 10 DWD -K <bob_key> -M <user> 
+//  bob sell 10 DWD for 1 token each.
+node src/cli.js sell 1 10 DWD -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob
+```
+
 #### Add a post / Commenting
 * *link*: a short string to be used as the index of the content
 * *parent_author*: the username of the author of the parent post
