@@ -251,6 +251,50 @@ program.command('transfer-asset <receiver> <amount> <asset> [memo]')
         writeLine('  $ xfer-asset bob 777 XBTC -F key.json -M alice')
     })
 
+program.command('buy <price> <amount> <asset>')
+    .description('put a buy order for an asset')
+    .action(function(price, amount, asset) {
+        verifyKeyAndUser()
+        sendTx(cmds.buy(program.key, program.me, price, amount, asset))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ buy 0.01 10 DWD -F key.json -M bob')
+    })
+ 
+program.command('sell <price> <amount> <asset>')
+    .description('put a sell order for an asset')
+    .action(function(price, amount, asset) {
+        verifyKeyAndUser()
+        sendTx(cmds.buy(program.key, program.me, price, amount, asset))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ sell 0.01 10 DWD -F key.json -M bob')
+    })   
+    
+program.command('sell-nft <price> <id>')
+    .description('put a sell order for an NFT')
+    .action(function(price, amount, asset) {
+        verifyKeyAndUser()
+        sendTx(cmds.buy(program.key, program.me, price, amount, asset))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ sell-nft 10  -F key.json -M bob')
+    })         
+    
+program.command('bid-nft <price> <id>')
+    .description('put a bid order for an NFT')
+    .action(function(price, amount, asset) {
+        verifyKeyAndUser()
+        sendTx(cmds.buy(program.key, program.me, price, amount, asset))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ bid-nft 10  -F key.json -M bob')
+    })          
+
 program.command('transfer-nft <receiver> <id> [memo]')
     .alias('xfer-nft')
     .description('transfer nft')

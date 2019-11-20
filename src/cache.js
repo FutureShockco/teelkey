@@ -6,13 +6,15 @@ var cache = {
         contents: {},
         distributed: {},
         changes: [],
-        inserts: []
+        inserts: [],
+        market: []
     },
     accounts: {},
     contents: {},
     distributed: {},
     changes: [],
     inserts: [],
+    market: [],
     rollback: function() {
         for (const key in cache.copy.accounts)
             cache.accounts[key] = cloneDeep(cache.copy.accounts[key])
@@ -24,16 +26,19 @@ var cache = {
             cache.changes[key] = cloneDeep(cache.copy.changes[key])
         for (const key in cache.copy.inserts)
             cache.inserts[key] = cloneDeep(cache.copy.inserts[key])
+        for (const key in cache.copy.market)
+            cache.market[key] = cloneDeep(cache.copy.market[key])    
         cache.copy.accounts = {}
         cache.copy.contents = {}
         cache.copy.distributed = {}
         cache.copy.changes = []
         cache.copy.inserts = []
+        cache.copy.market = []
         eco.nextBlock()
         //logr.trace('Cache rollback\'d')
     },
     findOne: function(collection, query, cb) {
-        if (['accounts','blocks','contents'].indexOf(collection) === -1) {
+        if (['accounts','blocks','contents','market'].indexOf(collection) === -1) {
             cb(true)
             return
         }
@@ -165,6 +170,7 @@ var cache = {
         cache.accounts = {}
         cache.contents = {}
         cache.distributed = {}
+        cache.market = {}
     },
     writeToDisk: function(cb) {
         var executions = []
@@ -183,7 +189,8 @@ var cache = {
         var docsToUpdate = {
             accounts: {},
             contents: {},
-            distributed: {}
+            distributed: {},
+            market: {}
         }
         for (let i = 0; i < cache.changes.length; i++) {
             var change = cache.changes[i]
@@ -226,6 +233,7 @@ var cache = {
             cache.copy.distributed = {}
             cache.copy.changes = []
             cache.copy.inserts = []
+            cache.copy.market = []
         })
     },
     keyByCollection: function(collection) {

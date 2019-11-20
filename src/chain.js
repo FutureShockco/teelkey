@@ -551,7 +551,8 @@ chain = {
                     {name: account.name},
                     {$set: {
                         vt: newVt,
-                        balance: newBalance
+                        balance: newBalance,
+                        created:ts
                     }},
                     function(err) {
                         if (err) throw err

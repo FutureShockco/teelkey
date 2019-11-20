@@ -10,7 +10,6 @@ let sign = (privKey, sender, tx) => {
     tx.sender = sender
     tx.ts = new Date().getTime()
     var txString = JSON.stringify(tx)
-
     // hash the transaction
     tx.hash = CryptoJS.SHA256(txString).toString()
 
@@ -22,6 +21,7 @@ let sign = (privKey, sender, tx) => {
 
     // convert signature to base58
     tx.signature = bs58.encode(signature.signature)
+
     return tx
 }
 
@@ -133,7 +133,7 @@ let cmds = {
 			parseInt(amount)+'}}'
         return sign(privKey, sender, tx)
     },
-
+    
     transferAsset: (privKey, sender, receiver, amount, asset, memo) => {
         if (!memo) memo=''
         var tx = '{"type":16,"data":{"receiver":"'+
@@ -148,6 +148,17 @@ let cmds = {
 			receiver+'", "id":"'+id+'", "memo":"'+memo+'"}}'
         return sign(privKey, sender, tx)
     },
+
+    masterJson: (privKey, sender, memo) => {
+        var tx = '{"type":18,"data":{"memo":"'+memo+'"}}'
+        return sign(privKey, sender, tx)
+    },
+
+    buy: (privKey, sender, price, amount, asset) => {
+        var tx = `{"type":19,"data":{"amount":${parseFloat(amount)},
+			"price":${parseFloat(price)},"asset":"${asset}"}}`
+        return sign(privKey, sender, tx)
+    }
 }
 
 module.exports = cmds

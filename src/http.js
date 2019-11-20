@@ -477,6 +477,27 @@ var http = {
             })
         })
 
+        
+        // get buy orders for an asset
+        app.get('/buy/:asset', (req, res) => {
+            if (!req.params.asset) {
+                res.sendStatus(500)
+                return
+            }
+            db.collection('market').find({asset: req.params.asset}, {sort: {price: -1}, limit: 200}).toArray(function(err, buyOrders) {
+                if (!buyOrders) res.sendStatus(404)
+                else res.send(buyOrders)
+            })
+        })
+
+        // get buy orders for an asset
+        app.get('/market', (req, res) => {
+            db.collection('market').find({}, {sort: {}, limit: 200}).toArray(function(err, orders) {
+                if (!orders) res.sendStatus(404)
+                else res.send(orders)
+            })
+        })
+
         // get open graph data for any url
         app.get('/opengraph/:url', (req, res) => {
             if (!req.params.url) {
