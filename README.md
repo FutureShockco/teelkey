@@ -96,15 +96,6 @@ node src/cli.js transfer-asset -K <bob_key> -M <user> <receiver> <amount> <asset
 // bob sends 50 DWD to charles
 node src/cli.js transfer-asset -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob charles 50 DWD 'thank you'
 ```
-#### Transfer NFT
-* *receiver*: username of the receiver of the transfer
-* *id*: unique ID of the non-fungible token.
-* *memo*: arbitrary short text content
-```
-node src/cli.js transfer-nft -K <bob_key> -M <user> <receiver> <id> <memo>
-// bob sends one unique token to charles
-node src/cli.js transfer-nft -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob charles unique_id 'thank you'
-```
 
 #### Buy asset
 * *price*: buy price of each tokens.
@@ -124,6 +115,34 @@ node src/cli.js buy 1 10 DWD -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M 
 node src/cli.js sell 1 10 DWD -K <bob_key> -M <user> 
 //  bob sell 10 DWD for 1 token each.
 node src/cli.js sell 1 10 DWD -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob
+```
+
+#### Transfer NFT
+* *receiver*: username of the receiver of the transfer
+* *id*: unique ID of the non-fungible token.
+* *memo*: arbitrary short text content
+```
+node src/cli.js transfer-nft -K <bob_key> -M <user> <receiver> <id> <memo>
+// bob sends one unique token to charles
+node src/cli.js transfer-nft -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob charles unique_id 'thank you'
+```
+
+#### Bid NFT
+* *price*: bid price on NFT.
+* *id*: unique ID of the non-fungible token.
+```
+node src/cli.js bid-nft 10 myUniqueTokenID -K <bob_key> -M <user> 
+// bob bid on myUniqueTokenID for 10.
+node src/cli.js bid-nft  10 myUniqueTokenID -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob
+```
+
+#### Sell NFT
+* *price*: bid price on NFT.
+* *id*: unique ID of the non-fungible token.
+```
+node src/cli.js sell-nft 1 10 myUniqueTokenID -K <bob_key> -M <user> 
+//  bob sell myUniqueTokenID for 10.
+node src/cli.js sell-nft 1 10 myUniqueTokenID -K HkUbQ5YpejWVSPt8Qgz8pkPGwkDrMn3XECd4Asn3ANB3 -M bob
 ```
 
 #### Add a post / Commenting
