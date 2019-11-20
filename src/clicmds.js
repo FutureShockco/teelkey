@@ -149,16 +149,34 @@ let cmds = {
         return sign(privKey, sender, tx)
     },
 
-    masterJson: (privKey, sender, memo) => {
-        var tx = '{"type":18,"data":{"memo":"'+memo+'"}}'
+    bidNft: (privKey, sender, price, amount, asset) => {
+        var tx = `{"type":18,"data":{"amount":${parseFloat(amount)},
+			"price":${parseFloat(price)},"asset":"${asset}"}}`
+        return sign(privKey, sender, tx)
+    },
+
+    sellNft: (privKey, sender, price, amount, asset) => {
+        var tx = `{"type":19,"data":{"amount":${parseFloat(amount)},
+			"price":${parseFloat(price)},"asset":"${asset}"}}`
         return sign(privKey, sender, tx)
     },
 
     buy: (privKey, sender, price, amount, asset) => {
-        var tx = `{"type":19,"data":{"amount":${parseFloat(amount)},
+        var tx = `{"type":20,"data":{"amount":${parseFloat(amount)},
 			"price":${parseFloat(price)},"asset":"${asset}"}}`
         return sign(privKey, sender, tx)
-    }
+    },
+
+    sell: (privKey, sender, price, amount, asset) => {
+        var tx = `{"type":21,"data":{"amount":${parseFloat(amount)},
+			"price":${parseFloat(price)},"asset":"${asset}"}}`
+        return sign(privKey, sender, tx)
+    },
+
+    masterJson: (privKey, sender, memo) => {
+        var tx = '{"type":22,"data":{"memo":"'+memo+'"}}'
+        return sign(privKey, sender, tx)
+    },
 }
 
 module.exports = cmds

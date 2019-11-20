@@ -1,3 +1,4 @@
+// Should be ordered by transaction types below.
 var transactions = [
     require('./newAccount.js'),
     require('./approveNode.js'),
@@ -6,7 +7,6 @@ var transactions = [
     require('./comment.js'),
     require('./vote.js'),
     require('./userJson.js'),
-    require('./userMasterJson.js'),
     require('./follow.js'),
     require('./unfollow.js'),
     null,
@@ -18,10 +18,11 @@ var transactions = [
     require('./transferBw.js'),
     require('./transferAsset.js'),
     require('./transferNft.js'),
-    require('./sellNft.js'),
     require('./bidNft.js'),
+    require('./sellNft.js'),
     require('./buyAsset.js'),
-    require('./sellAsset.js')
+    require('./sellAsset.js'),
+    require('./userMasterJson.js')
 ]
 
 module.exports = {
@@ -56,14 +57,13 @@ module.exports = {
             logr.debug('error shouldnt happen but did:')
             cb(false, 'forbidden transaction type'); return
         }
-
         // enforce there's no unknown field included in the transaction
         for (let i = 0; i < Object.keys(tx.data).length; i++)
             if (transactions[tx.type].fields.indexOf(Object.keys(tx.data)[i]) === -1) {
+                console.log(tx.data,transactions[tx.type].fields)
                 cb(false, 'unknown tx.data.'+Object.keys(tx.data)[i])
                 return
             }
-
         transactions[tx.type].validate(tx, ts, legitUser, cb)
     },
     execute: (tx, ts, cb) => {

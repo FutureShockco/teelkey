@@ -259,25 +259,25 @@ program.command('buy <price> <amount> <asset>')
     }).on('--help', function(){
         writeLine('')
         writeLine('Example:')
-        writeLine('  $ buy 0.01 10 DWD -F key.json -M bob')
+        writeLine('  $ buy 1 10 DWD -F key.json -M bob')
     })
  
 program.command('sell <price> <amount> <asset>')
     .description('put a sell order for an asset')
     .action(function(price, amount, asset) {
         verifyKeyAndUser()
-        sendTx(cmds.buy(program.key, program.me, price, amount, asset))
+        sendTx(cmds.sell(program.key, program.me, price, amount, asset))
     }).on('--help', function(){
         writeLine('')
         writeLine('Example:')
-        writeLine('  $ sell 0.01 10 DWD -F key.json -M bob')
+        writeLine('  $ sell 1 10 DWD -F key.json -M bob')
     })   
     
 program.command('sell-nft <price> <id>')
     .description('put a sell order for an NFT')
     .action(function(price, amount, asset) {
         verifyKeyAndUser()
-        sendTx(cmds.buy(program.key, program.me, price, amount, asset))
+        sendTx(cmds.sellNft(program.key, program.me, price, amount, asset))
     }).on('--help', function(){
         writeLine('')
         writeLine('Example:')
@@ -288,7 +288,7 @@ program.command('bid-nft <price> <id>')
     .description('put a bid order for an NFT')
     .action(function(price, amount, asset) {
         verifyKeyAndUser()
-        sendTx(cmds.buy(program.key, program.me, price, amount, asset))
+        sendTx(cmds.bidNft(program.key, program.me, price, amount, asset))
     }).on('--help', function(){
         writeLine('')
         writeLine('Example:')

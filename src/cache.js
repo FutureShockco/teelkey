@@ -38,7 +38,7 @@ var cache = {
         //logr.trace('Cache rollback\'d')
     },
     findOne: function(collection, query, cb) {
-        if (['accounts','blocks','contents','market'].indexOf(collection) === -1) {
+        if (['accounts','blocks','contents'].indexOf(collection) === -1) {
             cb(true)
             return
         }
@@ -58,6 +58,7 @@ var cache = {
                     // doesnt exist
                     cb(); return
                 }
+                console.log(obj)
                 // found, adding to cache
                 cache[collection][obj[key]] = obj
 
