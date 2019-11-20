@@ -58,7 +58,6 @@ var cache = {
                     // doesnt exist
                     cb(); return
                 }
-                console.log(obj)
                 // found, adding to cache
                 cache[collection][obj[key]] = obj
 
