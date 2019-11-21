@@ -87,7 +87,12 @@ module.exports = {
                 db.collection('market').insertOne(
                     { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "buy", asset: tx.data.asset, expire: ts + (7 * 24 * 60 * 60 * 1000) },
                     function () {
-                        cb(true)
+                        cache.updateOne('accounts',
+                        { name: tx.sender },
+                        { $inc: { balance: - (tx.data.amount * order.price) } },
+                        function () {
+                            cb(true)
+                        })
                     }
                 )
             }
