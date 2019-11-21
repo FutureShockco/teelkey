@@ -17,7 +17,7 @@ setx DB_URL "mongodb://localhost:27017"
 ::setx NOTIFICATIONS "0" 
 
 ::trace / debug / info / warn
-setx LOG_LEVEL "trace" 
+setx LOG_LEVEL "debug" 
 
 ::groups blocks during replay output to lower screen spam
 setx REPLAY_OUTPUT "1" 
@@ -32,4 +32,8 @@ setx NODE_OWNER_PRIV "6a8ZCRXaKixGUC1yZGLhuhkUta8cv2EysXuh9aqK2pgw"
 
 ::src path
 cd "C:\Users\hight\Desktop\teelkey\src"
-start cmd /C node --stack-size=65500 main
+start cmd /K node --stack-size=65500 main
+echo %time%
+timeout 9 > NUL
+echo %time%
+start chrome --incognito "http://localhost:3001/mineBlock"
