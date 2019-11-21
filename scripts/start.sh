@@ -16,13 +16,13 @@ export DB_URL=mongodb://localhost:27017
 #export NOTIFICATIONS=1
 
 # trace / debug / info / warn
-export LOG_LEVEL=debug
+export LOG_LEVEL=trace
 
 # groups blocks during replay output to lower screen spam
 export REPLAY_OUTPUT=100
 
 # default peers to connect with on startup
-export PEERS=ws://134.209.175.86:6001
+export PEERS=wss://teelkey.com/websocket/
 
 # your user and keys (only useful for active node owners)
 export NODE_OWNER=observer
