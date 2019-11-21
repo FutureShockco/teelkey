@@ -89,7 +89,7 @@ module.exports = {
                     function () {
                         cache.updateOne('accounts',
                         { name: tx.sender },
-                        { $inc: { balance: - (tx.data.amount * order.price) } },
+                        { $inc: { balance: - (tx.data.amount * tx.data.price) } },
                         function () {
                             cb(true)
                         })

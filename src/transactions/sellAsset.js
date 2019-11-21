@@ -54,13 +54,13 @@ module.exports = {
                     //add tokens to seller
                     cache.updateOne('accounts',
                         { name: tx.sender },
-                        { $inc: { balance: + (tx.data.amount * order.price) } },
+                        { $inc: { balance: + (order.amount * order.price) } },
                         function () {
                             //add assets to buyer
                             cache.findOne('accounts', { name: order.name }, function (err, account) {
                                 var assets = account.assets || {};
-                                if (assets[tx.data.asset]) assets[tx.data.asset] += tx.data.amount
-                                else assets[tx.data.asset] = tx.data.amount
+                                if (assets[tx.data.asset]) assets[tx.data.asset] += order.amount
+                                else assets[tx.data.asset] = order.amount
                                 cache.updateOne('accounts',
                                     { name: order.name },
                                     { $set: { assets: assets } },
@@ -78,7 +78,16 @@ module.exports = {
                 db.collection('market').insertOne(
                     { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "sell", asset: tx.data.asset, expire: ts + (7 * 24 * 60 * 60 * 1000) },
                     function () {
-                        cb(true)
+                        cache.findOne('accounts', { name: tx.sender }, function (err, account) {
+                            var assets = account.assets || {};
+                            assets[tx.data.asset] -= tx.data.amount
+                            cache.updateOne('accounts',
+                                { name: tx.sender },
+                                { $set: { assets: assets } },
+                                function () {
+                                    cb(true)
+                                })
+                        })
                     }
                 )
             }
