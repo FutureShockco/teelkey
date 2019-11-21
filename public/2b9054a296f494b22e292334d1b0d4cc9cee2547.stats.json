@@ -3,15 +3,15 @@
     "name": "standard-minifier-js",
     "version": "2.4.1"
   },
-  "totalMinifiedBytes": 1319054,
-  "totalMinifiedGzipBytes": 392270,
+  "totalMinifiedBytes": 1321568,
+  "totalMinifiedGzipBytes": 393266,
   "minifiedBytesByPackage": {
     "packages/meteor.js": 9484,
     "packages/meteor-base.js": 31,
     "packages/mobile-experience.js": 37,
     "packages/modules-runtime.js": 4199,
     "packages/modules.js": [
-      585597,
+      585498,
       {
         "node_modules": {
           "meteor": {
@@ -81,7 +81,7 @@
             "browser.js": 3702
           },
           "elliptic": {
-            "package.json": 1307,
+            "package.json": 1244,
             "lib": {
               "elliptic.js": 240,
               "elliptic": {
@@ -635,7 +635,7 @@
           },
           "@babel": {
             "runtime": {
-              "package.json": 492,
+              "package.json": 456,
               "helpers": {
                 "interopRequireDefault.js": 79,
                 "objectSpread.js": 380,
@@ -1197,24 +1197,25 @@
       {}
     ],
     "app/app.js": [
-      300765,
+      303378,
       {
         "client": {
           "navigation": {
             "template.bottom.js": 1363,
-            "template.footer.js": 3179,
-            "template.sidebar.js": 125,
-            "template.top.js": 2361,
-            "top.js": 205
+            "template.footer.js": 2755,
+            "template.sidebar.js": 460,
+            "template.top.js": 2371,
+            "sidebar.js": 12,
+            "top.js": 230
           },
           "pages": {
             "template.about.js": 412,
             "template.dapps.js": 412,
             "template.explorer.js": 424,
-            "template.home.js": 425,
+            "template.home.js": 3646,
             "template.resources.js": 428,
-            "template.signup.js": 1646,
-            "template.token.js": 412,
+            "template.signup.js": 1238,
+            "template.token.js": 418,
             "template.wallet.js": 416
           },
           "main.html": 56,
@@ -1252,10 +1253,10 @@
           "js": {
             "broadcast.js": 3749,
             "helpers.js": 1130,
-            "user.js": 519
+            "user.js": 357
           },
           "router.js": 1693,
-          "main.js": 498
+          "main.js": 441
         }
       }
     ]
