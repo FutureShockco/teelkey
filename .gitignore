@@ -7,3 +7,5 @@ logs/*
 tmptx.json
 bin
 dump
+scripts/send_asset.bat
+scripts/small_network.bat

@@ -32,7 +32,7 @@ module.exports = {
                         { $inc: { balance: + (tx.data.amount * order.price) } },
                         function () {
                             cache.updateOne('accounts',
-                                { name: order.name },
+                                { name: tx.sender },
                                 { $inc: { balance: - (tx.data.amount * order.price) } },
                                 function () {
                                     //add asset to buyer
@@ -48,7 +48,7 @@ module.exports = {
                                                 //check if the order should be removed or still have amount left in and return
                                                 if (order.amount > 0) db.collection('market').updateOne({ "_id": order._id }, { $set: order }, { upsert: true });
                                                 else db.collection('market').deleteOne({ "_id": order._id });
-                                                cb(true)
+                                                return
                                             })
                                     })
                                 })
