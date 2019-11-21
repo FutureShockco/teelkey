@@ -269,7 +269,11 @@ var p2p = {
             //     process.exit(0)
             // }
             if (err)
+            {
+                console.log(err)
                 logr.error('Error Replay', newBlock)
+            }
+
             else {
                 delete p2p.recoveredBlocks[newBlock._id]
                 p2p.recover()

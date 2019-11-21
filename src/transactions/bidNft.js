@@ -1,10 +1,10 @@
 module.exports = {
     fields: ['price', 'amount', 'asset'],
     validate: (tx, ts, legitUser, cb) => {
-        if (!validate.float(tx.data.price, false, false)) {
+        if (!validate.integer(tx.data.price, false, false)) {
             cb(false, 'invalid tx data.price'); return
         }
-        if (!validate.float(tx.data.amount, false, false)) {
+        if (!validate.integer(tx.data.amount, false, false)) {
             cb(false, 'invalid tx data.amount'); return
         }
         if (!validate.string(tx.data.asset, config.assetMaxLength, config.assetMinLength, config.assetAlphabet, '')) {

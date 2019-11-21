@@ -17,17 +17,17 @@ setx DB_URL "mongodb://localhost:27017"
 ::setx NOTIFICATIONS "0" 
 
 ::trace / debug / info / warn
-setx LOG_LEVEL "debug" 
+setx LOG_LEVEL "trace" 
 
 ::groups blocks during replay output to lower screen spam
 setx REPLAY_OUTPUT "1" 
 
 ::default peers to connect with on startup
-setx PEERS ""
+setx PEERS "wss://teelkey.com/websocket/"
 ::setx PEERS "ws://134.209.175.86:6001"
 ::your user and keys (only useful for active node owners)
-setx NODE_OWNER "master"
-setx NODE_OWNER_PUB "iYafLsLU8qvsGS8TuU2TyNMjRz6jQVR3XaER4Gswrkn4" 
+setx NODE_OWNER "observer"
+setx NODE_OWNER_PUB "edYafLsLU8qvsGS8TuU2TyNMjRz6jQVR3XaER4Gswrkn4" 
 setx NODE_OWNER_PRIV "6a8ZCRXaKixGUC1yZGLhuhkUta8cv2EysXuh9aqK2pgw"
 
 ::src path
@@ -36,4 +36,6 @@ start cmd /K node --stack-size=65500 main
 echo %time%
 timeout 9 > NUL
 echo %time%
-start chrome --incognito "http://localhost:3001/mineBlock"
+::start chrome --incognito "http://localhost:3001/mineBlock"
+
+
