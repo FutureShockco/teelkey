@@ -23,12 +23,12 @@ module.exports = {
             return
         }
 
-        cache.findOne('accounts', {name: tx.sender}, function(err, account) {
+        cache.findOne('accounts', { name: tx.sender }, function (err, account) {
             if (err) throw err
-            if (!account['asset_'+tx.data.asset] || account['asset_'+tx.data.asset] < tx.data.amount) {
-                cb(false, 'invalid tx not enough '+tx.data.asset+' balance'); return
+            if (!account.assets[tx.data.asset] || account.assets[tx.data.asset] < tx.data.amount) {
+                cb(false, 'invalid tx not enough ' + tx.data.asset + ' balance'); return
             }
-            cache.findOne('accounts', {name: tx.data.receiver}, function(err, account) {
+            cache.findOne('accounts', { name: tx.data.receiver }, function (err, account) {
                 if (err) throw err
                 if (!account) cb(false, 'invalid tx receiver does not exist')
                 else cb(true)
@@ -37,27 +37,30 @@ module.exports = {
     },
     execute: (tx, ts, cb) => {
         // add funds to receiver
-        var inc = {}
-        inc['asset_'+tx.data.asset] = tx.data.amount
-        cache.updateOne('accounts', 
-            {name: tx.data.receiver},
-            {$inc: inc},
-            function() {
-                if (tx.sender === config.masterName) {
-                    cb(true)
-                    return
-                }
-                
-                // remove funds from sender
-                inc['asset_'+tx.data.asset] = -tx.data.amount
-                cache.updateOne('accounts', 
-                    {name: tx.sender},
-                    {$inc: inc},
-                    function() {
+        cache.findOne('accounts', { name: tx.data.receiver }, function (err, account) {
+            var assets = account.assets || {};
+            if (assets[tx.data.asset]) assets[tx.data.asset] += tx.data.amount
+            else assets[tx.data.asset] = tx.data.amount
+            cache.updateOne('accounts',
+                { name: tx.data.receiver },
+                { $set: { assets: assets } },
+                function () {
+                    if (tx.sender === config.masterName) {
                         cb(true)
+                        return
                     }
-                )
-            })
-        
+                    // remove funds from sender
+                    cache.findOne('accounts', { name: tx.sender }, function (err, account) {
+                        account.assets[tx.data.asset] -= tx.data.amount
+                        cache.updateOne('accounts',
+                            { name: tx.sender },
+                            { $set: { assets: account.assets } },
+                            function () {
+                                cb(true)
+                            }
+                        )
+                    })
+                })
+        })
     }
 }
