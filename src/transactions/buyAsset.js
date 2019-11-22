@@ -23,7 +23,8 @@ module.exports = {
         let query = { $and: [{ amount: { $gte: 1 } }, { price: { $lte: tx.data.price } }, { asset: tx.data.asset, type: "sell" }]}
         let sort = { price: 1, created:1 }
         cache.find('market', query , sort, function (err, orders) {
-            orders.forEach(order => {
+            for(let i=0; i < orders.length && tx.data.amount > 0; i++){
+                let order = orders[i];
                 //process the deal if existent order amount is bigger
                 if (order.amount >= tx.data.amount) {
                     order.amount -= tx.data.amount;
@@ -83,7 +84,7 @@ module.exports = {
                                 })
                         })
                 }
-            })
+            }
             //if no order or couldnt spend all let open a new order
             if (tx.data.amount > 0) {
                 var newOrder = { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "buy", asset: tx.data.asset, created: ts }

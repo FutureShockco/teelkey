@@ -149,15 +149,16 @@ let cmds = {
         return sign(privKey, sender, tx)
     },
 
-    bidNft: (privKey, sender, price, amount, asset) => {
-        var tx = `{"type":18,"data":{"amount":${parseFloat(amount)},
-			"price":${parseFloat(price)},"asset":"${asset}"}}`
+    bidNft: (privKey, sender, id, price) => {
+        var tx = `{"type":18,"data":{"id":"${id}",
+			"price":${parseFloat(price)}}}`
         return sign(privKey, sender, tx)
     },
 
-    sellNft: (privKey, sender, price, amount, asset) => {
-        var tx = `{"type":19,"data":{"amount":${parseFloat(amount)},
-			"price":${parseFloat(price)},"asset":"${asset}"}}`
+    sellNft: (privKey, sender, id, min_price, price) => {
+        var tx = `{"type":19,"data":{"id":"${id}",
+			"min_price":${parseFloat(min_price)},
+			"price":${parseFloat(price)}}}`
         return sign(privKey, sender, tx)
     },
 

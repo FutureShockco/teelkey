@@ -8,7 +8,10 @@ var cache = {
         changes: [],
         inserts: [],
         removes: [],
-        market: []
+        market: [],
+        nft_market: [],
+        market_history: []
+
     },
     accounts: {},
     contents: {},
@@ -17,6 +20,8 @@ var cache = {
     inserts: [],
     removes: [],
     market: [],
+    nft_market: [],
+    market_history: [],
     rollback: function() {
         for (const key in cache.copy.accounts)
             cache.accounts[key] = cloneDeep(cache.copy.accounts[key])
@@ -31,7 +36,11 @@ var cache = {
         for (const key in cache.copy.removes)
             cache.removes[key] = cloneDeep(cache.copy.removes[key])
         for (const key in cache.copy.market)
-            cache.market[key] = cloneDeep(cache.copy.market[key])    
+            cache.market[key] = cloneDeep(cache.copy.market[key])   
+        for (const key in cache.copy.nft_market)
+            cache.nft_market[key] = cloneDeep(cache.copy.nft_market[key])  
+        for (const key in cache.copy.market)
+            cache.market_history[key] = cloneDeep(cache.copy.market_history[key])   
         cache.copy.accounts = {}
         cache.copy.contents = {}
         cache.copy.distributed = {}
@@ -39,11 +48,13 @@ var cache = {
         cache.copy.inserts = []
         cache.copy.removes = []
         cache.copy.market = []
+        cache.copy.nft_market = []
+        cache.copy.market_history = []
         eco.nextBlock()
         //logr.trace('Cache rollback\'d')
     },
     findOne: function(collection, query, cb) {
-        if (['accounts','blocks','contents','market'].indexOf(collection) === -1) {
+        if (['accounts','blocks','contents','market','nft_market','market_history'].indexOf(collection) === -1) {
             cb(true)
             return
         }
@@ -73,7 +84,11 @@ var cache = {
         })
     },
     find: function(collection, query, sort, cb) {
-        // no match, searching in mongodb
+        if (['market','nft_market','market_history'].indexOf(collection) === -1) {
+            cb(true)
+            return
+        }
+        // searching in mongodb
         db.collection(collection).find(query).sort(sort).toArray(function(err, obj) {
             if (err) logr.debug('error cache')
             else {
@@ -196,6 +211,8 @@ var cache = {
         cache.contents = {}
         cache.distributed = {}
         cache.market = {}
+        cache.nft_market = {}
+        cache.market_history = {}
     },
     writeToDisk: function(cb) {
         var executions = []
@@ -223,7 +240,9 @@ var cache = {
             accounts: {},
             contents: {},
             distributed: {},
-            market: {}
+            market: {},
+            nft_market: {},
+            market_history: {}
         }
         for (let i = 0; i < cache.changes.length; i++) {
             var change = cache.changes[i]
@@ -269,6 +288,8 @@ var cache = {
             cache.copy.inserts = []
             cache.copy.removes = []
             cache.copy.market = []
+            cache.copy.nft_market = []
+            cache.copy.market_history = []
         })
     },
     keyByCollection: function(collection) {

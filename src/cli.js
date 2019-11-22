@@ -273,26 +273,26 @@ program.command('sell <price> <amount> <asset>')
         writeLine('  $ sell 1 10 DWD -F key.json -M bob')
     })   
     
-program.command('sell-nft <price> <id>')
+program.command('sell-nft <id> <min_price> <price> ')
     .description('put a sell order for an NFT')
-    .action(function(price, amount, asset) {
+    .action(function(id, min_price, price) {
         verifyKeyAndUser()
-        sendTx(cmds.sellNft(program.key, program.me, price, amount, asset))
+        sendTx(cmds.sellNft(program.key, program.me, id, min_price, price))
     }).on('--help', function(){
         writeLine('')
         writeLine('Example:')
-        writeLine('  $ sell-nft 10  -F key.json -M bob')
+        writeLine('  $ sell-nft uniqueid 10 100 -F key.json -M bob')
     })         
     
-program.command('bid-nft <price> <id>')
+program.command('bid-nft <id> <price>')
     .description('put a bid order for an NFT')
-    .action(function(price, amount, asset) {
+    .action(function(id, price) {
         verifyKeyAndUser()
-        sendTx(cmds.bidNft(program.key, program.me, price, amount, asset))
+        sendTx(cmds.bidNft(program.key, program.me, id, price))
     }).on('--help', function(){
         writeLine('')
         writeLine('Example:')
-        writeLine('  $ bid-nft 10  -F key.json -M bob')
+        writeLine('  $ bid-nft uniqueid 10 -F key.json -M bob')
     })          
 
 program.command('transfer-nft <receiver> <id> [memo]')

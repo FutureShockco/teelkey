@@ -1,42 +1,34 @@
 module.exports = {
-    fields: ['price', 'amount', 'asset'],
+    fields: ['id', 'min_price', 'price'],
     validate: (tx, ts, legitUser, cb) => {
+        if (!validate.string(tx.data.id, config.nftMaxLength, config.nftMinLength, config.nftAlphabet, '')) {
+            cb(false, 'invalid tx data.id'); return
+        }
+        if (!validate.integer(tx.data.min_price, false, false)) {
+            cb(false, 'invalid tx data.min_price'); return
+        }
         if (!validate.integer(tx.data.price, false, false)) {
             cb(false, 'invalid tx data.price'); return
         }
-        if (!validate.integer(tx.data.amount, false, false)) {
-            cb(false, 'invalid tx data.amount'); return
-        }
-        if (!validate.string(tx.data.asset, config.assetMaxLength, config.assetMinLength, config.assetAlphabet, '')) {
-            cb(false, 'invalid tx data.asset'); return
-        }
         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
             if (err) throw err
-            if (account.balance < (tx.data.amount * tx.data.price)) {
-                cb(false, 'invalid tx not enough balance'); return
+            if (!account.nfts.includes(tx.data.id)) {
+                cb(false, 'invalid tx not enough ' + tx.data.id + ' balance'); return
             }
             else cb(true)
         })
     },
     execute: (tx, ts, cb) => {
-        // remove funds from sender
+        // remove nft from sender
         cache.updateOne('accounts',
             { name: tx.sender },
-            { $inc: { balance: - (tx.data.amount * tx.data.price) } },
+            { $pull: { nfts: tx.data.id } },
             function () {
-                // check sell order in market
-                cache.find('market', {asset: tx.data.asset, type:"buy"}, function(err, orders) {
-                    console.log(orders)
-
-                })
-
-                // add order to buy market
-                db.collection('market').insertOne(
-                    { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "sell", asset: tx.data.asset },
-                    function () {
-                        cb(true)
-                    }
-                )
+                //add asset to seller
+                var newOrder = { name: tx.sender, nft: tx.data.id, min_price: tx.data.min_price, price: tx.data.price, type: "sell", created: ts, bids:[] }
+                cache.insertOne('nft_market', newOrder, function () {
+                    cb(true)
+                });
             })
     }
 }
