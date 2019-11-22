@@ -20,7 +20,9 @@ module.exports = {
     },
     execute: (tx, ts, cb) => {
         // check sell order in market
-        db.collection('market').find({ $and: [{ amount: { $gte: 1 } }, { price: { $lte: tx.data.price } }, { asset: tx.data.asset, type: "sell" }] }, { sort: { price: 1 } }).toArray(function (err, orders) {
+        let query = { $and: [{ amount: { $gte: 1 } }, { price: { $lte: tx.data.price } }, { asset: tx.data.asset, type: "sell" }]}
+        let sort = { price: 1, created:1 }
+        cache.find('market', query , sort, function (err, orders) {
             orders.forEach(order => {
                 //process the deal if existent order amount is bigger
                 if (order.amount >= tx.data.amount) {
@@ -46,7 +48,7 @@ module.exports = {
                                                 tx.data.amount = 0;
                                                 //check if the order should be removed or still have amount left in and return
                                                 if (order.amount > 0)  cache.updateOne('market',{ _id: order._id },{ $set: order }, function(){});
-                                                else db.collection('market').deleteOne({ _id: order._id });
+                                                else  cache.deleteOne('market',order, function(){});
                                                 return 
                                             })
                                     })
@@ -75,16 +77,17 @@ module.exports = {
                                             function () {
                                                 //remove the order
                                                 tx.data.amount -= order.amount;
-                                                db.collection('market').deleteOne({ _id: order._id });
+                                                cache.deleteOne('market',order, function(){});
                                             })
                                     })
                                 })
                         })
                 }
             })
+            //if no order or couldnt spend all let open a new order
             if (tx.data.amount > 0) {
                 var newOrder = { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "buy", asset: tx.data.asset, created: ts }
-                db.collection('market').insertOne( newOrder, function(){
+                cache.insertOne('market',newOrder,function () {
                     cache.updateOne('accounts',
                     { name: tx.sender },
                     { $inc: { balance: - (tx.data.amount * tx.data.price) } },

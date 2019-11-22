@@ -7,6 +7,7 @@ var cache = {
         distributed: {},
         changes: [],
         inserts: [],
+        removes: [],
         market: []
     },
     accounts: {},
@@ -14,6 +15,7 @@ var cache = {
     distributed: {},
     changes: [],
     inserts: [],
+    removes: [],
     market: [],
     rollback: function() {
         for (const key in cache.copy.accounts)
@@ -26,6 +28,8 @@ var cache = {
             cache.changes[key] = cloneDeep(cache.copy.changes[key])
         for (const key in cache.copy.inserts)
             cache.inserts[key] = cloneDeep(cache.copy.inserts[key])
+        for (const key in cache.copy.removes)
+            cache.removes[key] = cloneDeep(cache.copy.removes[key])
         for (const key in cache.copy.market)
             cache.market[key] = cloneDeep(cache.copy.market[key])    
         cache.copy.accounts = {}
@@ -33,6 +37,7 @@ var cache = {
         cache.copy.distributed = {}
         cache.copy.changes = []
         cache.copy.inserts = []
+        cache.copy.removes = []
         cache.copy.market = []
         eco.nextBlock()
         //logr.trace('Cache rollback\'d')
@@ -61,6 +66,19 @@ var cache = {
                 // found, adding to cache
                 cache[collection][obj[key]] = obj
 
+                // cloning the object before sending it
+                let res = cloneDeep(obj)
+                cb(null, res)
+            }
+        })
+    },
+    find: function(collection, query, sort, cb) {
+        // no match, searching in mongodb
+        db.collection(collection).find(query).sort(sort).toArray(function(err, obj) {
+            if (err) logr.debug('error cache')
+            else {
+                // found, adding to cache
+                cache[collection] = obj
                 // cloning the object before sending it
                 let res = cloneDeep(obj)
                 cb(null, res)
@@ -166,6 +184,13 @@ var cache = {
 
         cb(null, true)
     },
+    deleteOne: function(collection, document, cb) {
+        cache.removes.push({
+            collection: collection,
+            document: document
+        })
+        cb(null, true)
+    },
     clear: function() {
         cache.accounts = {}
         cache.contents = {}
@@ -183,7 +208,15 @@ var cache = {
                     callback()
                 })
             })
-
+        // executing the removes (completed orders / auctions)
+        for (let i = 0; i < cache.removes.length; i++)
+            executions.push(function(callback) {
+                var remove = cache.removes[i]
+                db.collection(remove.collection).deleteOne({_id:remove.document._id}, function(err) {
+                    if (err) throw err
+                    callback()
+                })
+            })   
         // then the update with simple operation compression
         // 1 update per document concerned (even if no real change)
         var docsToUpdate = {
@@ -228,11 +261,13 @@ var cache = {
             cb(err, results)
             cache.changes = []
             cache.inserts = []
+            cache.removes = []
             cache.copy.accounts = {}
             cache.copy.contents = {}
             cache.copy.distributed = {}
             cache.copy.changes = []
             cache.copy.inserts = []
+            cache.copy.removes = []
             cache.copy.market = []
         })
     },
