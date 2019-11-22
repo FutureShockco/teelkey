@@ -9,3 +9,4 @@ bin
 dump
 scripts/send_asset.bat
 scripts/small_network.bat
+src/logs/output.log
