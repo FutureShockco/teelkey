@@ -42,8 +42,8 @@ module.exports = {
                                     function () {
                                         tx.data.amount = 0;
                                         //check if the order should be removed or still have amount left in and return
-                                        if (order.amount > 0) db.collection('market').updateOne({ "_id": order._id }, { $set: order }, { upsert: true });
-                                        else db.collection('market').deleteOne({ "_id": order._id });
+                                        if (order.amount > 0) cache.updateOne('market',{ _id: order._id }, { $set: order }, function(){});
+                                        else db.collection('market').deleteOne({ _id: order._id });
                                         return
                                     })
                             })
@@ -67,7 +67,7 @@ module.exports = {
                                     function () {
                                         //remove the order
                                         tx.data.amount -= order.amount;
-                                        db.collection('market').deleteOne({ "_id": order._id });
+                                        db.collection('market').deleteOne({ _id: order._id });
                                     })
                             })
                         })
@@ -75,9 +75,8 @@ module.exports = {
             }
             //if couldnt spend all open a new order
             if (tx.data.amount > 0) {
-                db.collection('market').insertOne(
-                    { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "sell", asset: tx.data.asset, expire: ts + (7 * 24 * 60 * 60 * 1000) },
-                    function () {
+                var newOrder = { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "sell", asset: tx.data.asset, created: ts }
+                db.collection('market').insertOne(newOrder,function () {
                         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
                             var assets = account.assets || {};
                             assets[tx.data.asset] -= tx.data.amount

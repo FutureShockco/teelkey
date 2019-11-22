@@ -45,11 +45,8 @@ module.exports = {
                                             function () {
                                                 tx.data.amount = 0;
                                                 //check if the order should be removed or still have amount left in and return
-                                                if (order.amount > 0)  cache.updateOne('market',{ _id: order._id },{ $set: order }, function(){
-                                                
-                                                });
-                                                else cache.updateOne('market',{ _id: order._id },{ $pull: { order: order } }, function(){
-                                                });
+                                                if (order.amount > 0)  cache.updateOne('market',{ _id: order._id },{ $set: order }, function(){});
+                                                else db.collection('market').deleteOne({ _id: order._id });
                                                 return 
                                             })
                                     })
@@ -78,9 +75,7 @@ module.exports = {
                                             function () {
                                                 //remove the order
                                                 tx.data.amount -= order.amount;
-                                                cache.updateOne('market',{ _id: order._id },{ $pull: { order: order } }, function(){
-                                                    
-                                                });
+                                                db.collection('market').deleteOne({ _id: order._id });
                                             })
                                     })
                                 })
