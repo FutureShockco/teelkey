@@ -21,8 +21,7 @@ module.exports = {
     execute: (tx, ts, cb) => {
         // check sell order in market
         db.collection('market').find({ $and: [{ amount: { $gte: 1 } }, { price: { $lte: tx.data.price } }, { asset: tx.data.asset, type: "sell" }] }, { sort: { price: 1 } }).toArray(function (err, orders) {
-            for (let index = 0; index < orders.length && tx.data.amount > 0; index++) {
-                let order = orders[index];
+            orders.forEach(order => {
                 //process the deal if existent order amount is bigger
                 if (order.amount >= tx.data.amount) {
                     order.amount -= tx.data.amount;
@@ -46,9 +45,12 @@ module.exports = {
                                             function () {
                                                 tx.data.amount = 0;
                                                 //check if the order should be removed or still have amount left in and return
-                                                if (order.amount > 0) db.collection('market').updateOne({ "_id": order._id }, { $set: order }, { upsert: true });
-                                                else db.collection('market').deleteOne({ "_id": order._id });
-                                                return
+                                                if (order.amount > 0)  cache.updateOne('market',{ _id: order._id },{ $set: order }, function(){
+                                                
+                                                });
+                                                else cache.updateOne('market',{ _id: order._id },{ $pull: { order: order } }, function(){
+                                                });
+                                                return 
                                             })
                                     })
                                 })
@@ -76,25 +78,25 @@ module.exports = {
                                             function () {
                                                 //remove the order
                                                 tx.data.amount -= order.amount;
-                                                db.collection('market').deleteOne({ "_id": order._id });
+                                                cache.updateOne('market',{ _id: order._id },{ $pull: { order: order } }, function(){
+                                                    
+                                                });
                                             })
                                     })
                                 })
                         })
                 }
-            }
+            })
             if (tx.data.amount > 0) {
-                db.collection('market').insertOne(
-                    { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "buy", asset: tx.data.asset, expire: ts + (7 * 24 * 60 * 60 * 1000) },
+                var newOrder = { name: tx.sender, amount: tx.data.amount, price: tx.data.price, type: "buy", asset: tx.data.asset, created: ts }
+                db.collection('market').insertOne( newOrder, function(){
+                    cache.updateOne('accounts',
+                    { name: tx.sender },
+                    { $inc: { balance: - (tx.data.amount * tx.data.price) } },
                     function () {
-                        cache.updateOne('accounts',
-                        { name: tx.sender },
-                        { $inc: { balance: - (tx.data.amount * tx.data.price) } },
-                        function () {
-                            cb(true)
-                        })
-                    }
-                )
+                        cb(true)
+                    })                            
+                });
             }
             else cb(true)
         })
