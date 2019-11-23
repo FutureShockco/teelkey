@@ -1,4 +1,4 @@
-var db_name = process.env.DB_NAME || 'avalon'
+var db_name = process.env.DB_NAME || 'teelkey'
 var db_url = process.env.DB_URL || 'mongodb://localhost:27017'
 var MongoClient = require('mongodb').MongoClient
 

@@ -101,7 +101,7 @@ var p2p = {
                 logr.warn('Received non-JSON, doing nothing ;)')
             }
             if (!message || typeof message.t === 'undefined') return
-            
+
             switch (message.t) {
             case MessageType.QUERY_NODE_STATUS:
                 var d = {
@@ -139,7 +139,7 @@ var p2p = {
                         p2p.recoveringBlocks.splice(i, 1)
                         break
                     }
-                            
+                    
                 if (chain.getLatestBlock()._id+1 === message.d._id)
                     p2p.addRecursive(message.d)
                 else {
@@ -207,8 +207,14 @@ var p2p = {
         if (p2p.recovering%2) p2p.recover()
     },
     errorHandler: (ws) => {
-        ws.on('close', () => p2p.closeConnection(ws))
-        ws.on('error', () => p2p.closeConnection(ws))
+        ws.on('close', (reason) => {
+            console.log(reason)
+            p2p.closeConnection(ws)
+        })
+        ws.on('error', (err) => {
+            console.log(err)
+            p2p.closeConnection(ws)
+        })
     },
     closeConnection: (ws) => {
         p2p.sockets.splice(p2p.sockets.indexOf(ws), 1)

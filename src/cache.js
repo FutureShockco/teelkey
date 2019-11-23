@@ -216,6 +216,11 @@ var cache = {
     },
     writeToDisk: function(cb) {
         var executions = []
+
+        //todo resolve all expired orders for market
+
+        //todo resolve all expired orders for nft_market
+
         // executing the inserts (new comment / new account)
         for (let i = 0; i < cache.inserts.length; i++)
             executions.push(function(callback) {

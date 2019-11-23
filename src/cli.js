@@ -11,11 +11,11 @@ const defaultPort = 3001
 
 program
     .version('0.2.0', '-V, --version')
-    .description('a cli tool to forge transactions and broadcast to avalon')
+    .description('a cli tool to forge transactions and broadcast to teelkey')
     .option('-K, --key [plaintext_key]', 'plain-text private key')
     .option('-F, --file [file_key]', 'file private key')
     .option('-M, --me [my_username]', 'username of the transactor')
-    .option('-A, --api [api_url]', 'avalon api url')
+    .option('-A, --api [api_url]', 'teelkey api url')
     .option('-S, --spam [delay_in_ms]', 'repeats the tx every delay')
 
 program.command('account <pub_key> <new_user>')

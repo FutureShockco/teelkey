@@ -54,7 +54,7 @@ process.on('SIGINT', function() {
     logr.warn('Waiting '+config.blockTime+' ms before shut down...')
     chain.shuttingDown = true
     setTimeout(function() {
-        logr.trace('Avalon exitted safely')
+        logr.trace('Teelkey exitted safely')
         process.exit(0)
     }, config.blockTime)
 })
