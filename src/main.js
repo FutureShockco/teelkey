@@ -10,6 +10,7 @@ cache = require('./cache.js')
 validate = require('./validate')
 eco = require('./economics.js')
 rankings = require('./rankings.js')
+//vm = require('./eth_vm.js')//ethereum vm
 
 // verify node version
 const nodeV = 10
@@ -37,7 +38,6 @@ mongo.init(function() {
     
             // init hot/trending
             rankings.init()
-    
             // start the http server
             http.init()
             // start the websocket server
