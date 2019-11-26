@@ -156,6 +156,43 @@ program.command('password <pub>')
         writeLine('  $ change-password tK9DqTygrcwGWZPsyVtZXNpfiZcAZN83nietKbKY8aiH -F key.json -M alice')
     })
 
+    program.command('change-recovery <user>')
+    .description('change your recovery account')
+    .action(function(user) {
+        verifyKeyAndUser()
+        sendTx(cmds.changeRecoveryAccount(program.key, program.me, user))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Arguments:')
+        writeLine('  <user>: the account name to that can recover your account')
+        writeLine('')
+        writeLine('WARNING:')
+        writeLine('  DO NOT change this if you are not sure!')
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ change-recovery bob -F key.json -M alice')
+    })
+
+    program.command('recover <user> <pub>')
+    .description('recover and change user master key')
+    .action(function(user, pub) {
+        verifyKeyAndUser()
+        sendTx(cmds.recoverAccount(program.key, program.me, user, pub))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Arguments:')
+        writeLine('  <user>: the account name to recover (you must be set as recovery accout)')
+        writeLine('')
+        writeLine('  <pub>: the new public key that will have full control over the account')
+        writeLine('')
+        writeLine('WARNING:')
+        writeLine('  DO NOT lose the new associated private key!')
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ recover bob tK9DqTygrcwGWZPsyVtZXNpfiZcAZN83nietKbKY8aiH -F key.json -M alice')
+    })
+
+
 program.command('profile <json>')
     .alias('user-json')
     .description('modify an account profile')

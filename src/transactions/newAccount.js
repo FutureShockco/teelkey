@@ -50,7 +50,8 @@ module.exports = {
             uv: 0,
             follows: [],
             followers: [],
-            keys: []
+            keys: [],
+            recovery_account: config.masterName
         }, function(){
             if (tx.data.name !== tx.data.pub.toLowerCase()) 
                 if (tx.sender !== config.masterName || config.masterPaysForUsernames) {
