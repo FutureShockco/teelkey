@@ -1,14 +1,11 @@
 module.exports = {
-    fields: ['id', 'min_price', 'price'],
+    fields: ['id', 'ask'],
     validate: (tx, ts, legitUser, cb) => {
         if (!validate.string(tx.data.id, config.nftMaxLength, config.nftMinLength, config.nftAlphabet, '')) {
             cb(false, 'invalid tx data.id'); return
         }
-        if (!validate.integer(tx.data.min_price, false, false)) {
-            cb(false, 'invalid tx data.min_price'); return
-        }
-        if (!validate.integer(tx.data.price, false, false)) {
-            cb(false, 'invalid tx data.price'); return
+        if (!validate.string(tx.data.ask, config.nftMaxLength, config.nftMinLength, config.nftAlphabet, '')) {
+            cb(false, 'invalid tx data.ask'); return
         }
         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
             if (err) throw err
@@ -25,7 +22,7 @@ module.exports = {
             { $pull: { nfts: tx.data.id } },
             function () {
                 //add asset to seller
-                var newOrder = { name: tx.sender, nft: tx.data.id, min_price: tx.data.min_price, price: tx.data.price, type: "sell", created: ts, bids:[] }
+                var newOrder = { name: tx.sender, nft: tx.data.id, ask: tx.data.min_price, type: "trade", created: ts }
                 cache.insertOne('nft_market', newOrder, function () {
                     cb(true)
                 });

@@ -58,7 +58,7 @@ let cmds = {
 			uri+'","json":'+content+'}}'
         return sign(privKey, sender, tx)
     },
-    //5
+    //4
     comment: (privKey, sender, uri, pa, pp, content, weight, tag) => {
         var tx = '{"type":4,"data":{"link":"'+
 			uri+'", "pa":"'+
@@ -68,7 +68,7 @@ let cmds = {
 			tag+'","json":'+content+'}}'
         return sign(privKey, sender, tx)
     },
-    //6
+    //5
     vote: (privKey, sender, link, author, weight, tag) => {
         if (!tag) tag = ''
         var tx = '{"type":5,"data":{"link":"'+
@@ -77,51 +77,51 @@ let cmds = {
 			parseInt(weight)+', "tag": "'+tag+'"}}'
         return sign(privKey, sender, tx)
     },
-	//7
+	//6
     profile: (privKey, sender, content) => {
         var tx = '{"type":6,"data":{"json":'+content+'}}'
         return sign(privKey, sender, tx)
     },
-	//8
+	//7
     follow: (privKey, sender, username) => {
         var tx = '{"type":7,"data":{"target":"'+username+'"}}'
         return sign(privKey, sender, tx)
     },
-	//9
+	//8
     unfollow: (privKey, sender, username) => {
         var tx = '{"type":8,"data":{"target":"'+username+'"}}'
         return sign(privKey, sender, tx)
     },
-	//10
+	//9
     newKey: (privKey, sender, id, pub, types) => {
-        var tx = '{"type":10,"data":{"id":"'+
+        var tx = '{"type":9,"data":{"id":"'+
 			id+'","pub":"'+
 			pub+'","types":'+types+'}}'
         return sign(privKey, sender, tx)
     },
-	//11
+	//10
     removeKey: (privKey, sender, id) => {
-        var tx = '{"type":11,"data":{"id":"'+id+'"}}'
+        var tx = '{"type":10,"data":{"id":"'+id+'"}}'
         return sign(privKey, sender, tx)
     },
-	//12
+	//11
     changePassword: (privKey, sender, pub) => {
-        var tx = '{"type":12,"data":{"pub":"'+pub+'"}}'
+        var tx = '{"type":11,"data":{"pub":"'+pub+'"}}'
+        return sign(privKey, sender, tx)
+    },
+    //12
+    changeRecoveryAccount: (privKey, sender, user) => {
+        var tx = '{"type":12,"data":{"user":"'+user+'"}}'
         return sign(privKey, sender, tx)
     },
     //13
-    changeRecoveryAccount: (privKey, sender, user) => {
-        var tx = '{"type":13,"data":{"user":"'+user+'"}}'
+    recoverAccount: (privKey, sender, user, pub) => {
+        var tx = '{"type":13,"data":{"user":"'+user+'","pub":"'+pub+'"}}'
         return sign(privKey, sender, tx)
     },
     //14
-    recoverAccount: (privKey, sender, user, pub) => {
-        var tx = '{"type":14,"data":{"user":"'+user+'","pub":"'+pub+'"}}'
-        return sign(privKey, sender, tx)
-    },
-    //15
     promotedComment: (privKey, sender, uri, pa, pp, content, weight, tag, burn) => {
-        var tx = '{"type":15,"data":{"link":"'+
+        var tx = '{"type":14,"data":{"link":"'+
 			uri+'", "pa":"'+
 			pa+'", "pp":"'+
 			pp+'", "vt":'+
@@ -129,46 +129,52 @@ let cmds = {
 			tag+'","burn":'+burn+',"json":'+content+'}}'
         return sign(privKey, sender, tx)
     },
-    //16
+    //15
     transferVt: (privKey, sender, receiver, amount) => {
+        var tx = '{"type":15,"data":{"receiver":"'+
+			receiver+'", "amount":'+
+			parseInt(amount)+'}}'
+        return sign(privKey, sender, tx)
+    },
+    //16
+    transferBw: (privKey, sender, receiver, amount) => {
         var tx = '{"type":16,"data":{"receiver":"'+
 			receiver+'", "amount":'+
 			parseInt(amount)+'}}'
         return sign(privKey, sender, tx)
     },
     //17
-    transferBw: (privKey, sender, receiver, amount) => {
-        var tx = '{"type":17,"data":{"receiver":"'+
-			receiver+'", "amount":'+
-			parseInt(amount)+'}}'
-        return sign(privKey, sender, tx)
-    },
-    //18
     transferAsset: (privKey, sender, receiver, amount, asset, memo) => {
         if (!memo) memo=''
-        var tx = '{"type":18,"data":{"receiver":"'+
+        var tx = '{"type":17,"data":{"receiver":"'+
 			receiver+'", "amount":'+
 			parseInt(amount)+', "asset":"'+asset+'", "memo":"'+memo+'"}}'
         return sign(privKey, sender, tx)
     },
-    //19
+    //18
     transferNft: (privKey, sender, receiver, id, memo) => {
         if (!memo) memo=''
-        var tx = '{"type":19,"data":{"receiver":"'+
+        var tx = '{"type":18,"data":{"receiver":"'+
 			receiver+'", "id":"'+id+'", "memo":"'+memo+'"}}'
         return sign(privKey, sender, tx)
     },
-    //20
+    //19
     bidNft: (privKey, sender, id, price) => {
+        var tx = `{"type":19,"data":{"id":"${id}",
+			"price":${parseFloat(price)}}}`
+        return sign(privKey, sender, tx)
+    },
+    //20
+    sellNft: (privKey, sender, id, min_price, price) => {
         var tx = `{"type":20,"data":{"id":"${id}",
+			"min_price":${parseFloat(min_price)},
 			"price":${parseFloat(price)}}}`
         return sign(privKey, sender, tx)
     },
     //21
-    sellNft: (privKey, sender, id, min_price, price) => {
+    tradeNft: (privKey, sender, id, ask) => {
         var tx = `{"type":21,"data":{"id":"${id}",
-			"min_price":${parseFloat(min_price)},
-			"price":${parseFloat(price)}}}`
+                "ask":"${ask}"}}`
         return sign(privKey, sender, tx)
     },
     //22
