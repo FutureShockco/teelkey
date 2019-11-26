@@ -51,7 +51,6 @@ module.exports = {
                                                 //check if the order should be removed or still have amount left in and return
                                                 if (order.amount > 0)  cache.updateOne('market',{ _id: order._id },{ $set: order }, function(){});
                                                 else  cache.deleteOne('market',order, function(){});
-                                                cb(true)
                                                 return 
                                             })
                                     })
@@ -88,7 +87,6 @@ module.exports = {
                 }
             }
             //if no order or couldnt spend all let open a new order
-            console.log(amount)
             if (amount > 0) {
                 var newOrder = { name: tx.sender, amount: amount, price: tx.data.price, type: "buy", asset: tx.data.asset, created: ts }
                 cache.insertOne('market',newOrder,function () {

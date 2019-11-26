@@ -9,7 +9,6 @@ var transactions = [
     require('./userJson.js'),
     require('./follow.js'),
     require('./unfollow.js'),
-    null,
     require('./newKey.js'),
     require('./removeKey.js'),
     require('./changePassword.js'),
@@ -20,6 +19,7 @@ var transactions = [
     require('./transferNft.js'),
     require('./bidNft.js'),
     require('./sellNft.js'),
+    require('./tradeNft.js'),
     require('./buyAsset.js'),
     require('./sellAsset.js'),
     require('./userMasterJson.js')
@@ -47,9 +47,10 @@ module.exports = {
         TRANSFER_NFT: 17,
         BID_NFT: 18,
         SELL_NFT: 19,
-        BUY: 20,
-        SELL: 21,
-        USER_MASTER_JSON: 22,
+        TRADE_NFT: 20,
+        BUY: 21,
+        SELL: 22,
+        USER_MASTER_JSON: 23,
     },
     validate: (tx, ts, legitUser, cb) => {
         // will make sure the transaction type exists (redondant ?)

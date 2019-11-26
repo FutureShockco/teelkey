@@ -22,5 +22,5 @@ vm.runCode({
         console.log('gasUsed  : ' + results.gasUsed.toString())
     })
     .catch(err => console.log('Error    : ' + err))
-
+    
 module.exports = vm
