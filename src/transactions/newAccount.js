@@ -51,7 +51,7 @@ module.exports = {
             follows: [],
             followers: [],
             keys: [],
-            recovery_account: config.masterName
+            recovery: config.masterName
         }, function(){
             if (tx.data.name !== tx.data.pub.toLowerCase()) 
                 if (tx.sender !== config.masterName || config.masterPaysForUsernames) {

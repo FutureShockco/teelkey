@@ -9,7 +9,7 @@ module.exports = {
         }
         cache.findOne('accounts', { name: tx.data.name }, function (err, account) {
             if (err) throw err
-            if (account.recovery_account !== tx.sender) {
+            if (account.recovery !== tx.sender) {
                 cb(false, 'invalid tx you are not set as recovery account'); return
             }
             else cb(true)

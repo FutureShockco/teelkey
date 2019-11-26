@@ -1,13 +1,16 @@
 module.exports = {
     fields: ['user'],
     validate: (tx, ts, legitUser, cb) => {
-        if (!validate.publicKey(tx.data.pub, config.accountMaxLength)) {
-            cb(false, 'invalid tx data.pub'); return
-        }
-        cb(true)
+        cache.findOne('accounts', { name: tx.data.user }, function (err, account) {
+            if (err) throw err
+            if (!account) {
+                cb(false, 'invalid tx recovery account does not exist'); return
+            }
+            else cb(true)
+        })
     },
     execute: (tx, ts, cb) => {
-        cache.updateOne('accounts', {name: tx.sender}, {$set: {recovery_account: tx.data.user}}, function() {
+        cache.updateOne('accounts', {name: tx.sender}, {$set: {recovery: tx.data.user}}, function() {
             cb(true)
         })
     }
