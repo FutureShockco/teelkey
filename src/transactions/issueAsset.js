@@ -13,22 +13,14 @@ module.exports = {
         if (!validate.string(tx.data.asset, config.assetMaxLength, config.assetMinLength, config.assetSymbolAlphabet, '')) {
             cb(false, 'invalid tx data.asset'); return
         }
-        if (tx.data.receiver === tx.sender) {
-            cb(false, 'invalid tx cannot send to self'); return
-        }
-
-        cache.findOne('accounts', { name: tx.sender }, function (err, account) {
+        cache.findOne('assets', { symbol: tx.data.asset, issuer: tx.sender }, function (err, asset) {
             if (err) throw err
-            if (!account.assets[tx.data.asset] || account.assets[tx.data.asset] < tx.data.amount) {
-                cb(false, 'invalid tx not enough ' + tx.data.asset + ' balance'); return
+            if (!asset || (asset.issued + tx.data.amount) > asset.supply) {
+                cb(false, 'invalid tx can not issue ' + tx.data.asset + ' '); return
             }
-            cache.findOne('accounts', { name: tx.data.receiver }, function (err, account) {
-                if (err) throw err
-                if (!account) cb(false, 'invalid tx receiver does not exist')
-                else cb(true)
-            })
+            else cb(true)
         })
-     
+
     },
     execute: (tx, ts, cb) => {
         // add funds to receiver
@@ -40,16 +32,12 @@ module.exports = {
                 { name: tx.data.receiver },
                 { $set: { assets: assets } },
                 function () {
-                    if (tx.sender === config.masterName) {
-                        cb(true)
-                        return
-                    }
                     // remove funds from sender
-                    cache.findOne('accounts', { name: tx.sender }, function (err, account) {
-                        account.assets[tx.data.asset] -= tx.data.amount
-                        cache.updateOne('accounts',
-                            { name: tx.sender },
-                            { $set: { assets: account.assets } },
+                    cache.findOne('assets', { symbol: tx.data.asset, issuer: tx.sender }, function (err, asset) {
+                        asset.issued += tx.data.amount
+                        cache.updateOne('assets',
+                            { _id: asset._id },
+                            { $set: asset },
                             function () {
                                 cb(true)
                             }

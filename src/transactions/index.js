@@ -24,7 +24,9 @@ var transactions = [
     require('./tradeNft.js'),//21
     require('./buyAsset.js'),//22
     require('./sellAsset.js'),//23
-    require('./userMasterJson.js')//24
+    require('./createAsset.js'),//24
+    require('./issueAsset.js'),//25
+    require('./userMasterJson.js')//26
 ]
 
 module.exports = {
@@ -53,7 +55,9 @@ module.exports = {
         TRADE_NFT: 21,
         BUY: 22,
         SELL: 23,
-        USER_MASTER_JSON: 24,
+        CREATE_ASSET: 24,
+        ISSUE_ASSET: 25,
+        USER_MASTER_JSON: 26,
     },
     validate: (tx, ts, legitUser, cb) => {
         console.log(tx)

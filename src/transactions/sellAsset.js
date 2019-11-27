@@ -37,7 +37,7 @@ module.exports = {
                             let order = orders[i];
                             //process the deal if existent order amount is bigger
                             if (order.amount > amount) {
-                                //reduce the existent order amount
+                                //decrease the existent order amount
                                 order.amount -= amount;
                                 //increase the seller balance
                                 cache.updateOne('accounts',
@@ -65,25 +65,25 @@ module.exports = {
                             //process the deal if existent order amount is smaller
                             else {
                                  //increase the seller balance
-                                    cache.updateOne('accounts',
-                                        { name: tx.sender },
-                                        { $inc: { balance: + (order.amount * order.price) } },
-                                        function () {
-                                            //add assets to buyer
-                                            cache.findOne('accounts', { name: order.name }, function (err, account) {
-                                                var assets = account.assets || {};
-                                                if (assets[tx.data.asset]) assets[tx.data.asset] += order.amount
-                                                else assets[tx.data.asset] = order.amount
-                                                cache.updateOne('accounts',
-                                                    { name: order.name },
-                                                    { $set: { assets: assets } },
-                                                    function () {
-                                                        //remove the order
-                                                        amount -= order.amount;
-                                                        cache.deleteOne('market',order, function(){});
-                                                    })
-                                            })
-                                        })
+                                 cache.updateOne('accounts',
+                                 { name: tx.sender },
+                                 { $inc: { balance: + (order.amount * order.price) } },
+                                 function () {
+                                     //add assets to buyer
+                                     cache.findOne('accounts', { name: order.name }, function (err, account) {
+                                         var assets = account.assets || {};
+                                         if (assets[tx.data.asset]) assets[tx.data.asset] += order.amount
+                                         else assets[tx.data.asset] = order.amount
+                                         cache.updateOne('accounts',
+                                             { name: order.name },
+                                             { $set: { assets: assets } },
+                                             function () {
+                                                 //remove the order
+                                                 amount -= order.amount;
+                                                 cache.deleteOne('market',order, function(){});
+                                             })
+                                     })
+                                 })
                             }
                         }
                         //if no order or couldnt spend all let open a new order
