@@ -288,6 +288,32 @@ program.command('transfer-asset <receiver> <amount> <asset> [memo]')
         writeLine('  $ xfer-asset bob 777 XBTC -F key.json -M alice')
     })
 
+program.command('create-asset <name> <ticker> <supply> <precision>')
+    .alias('xfer-create-asset')
+    .description('create asset')
+    .action(function(name, ticker, supply, precision) {
+        verifyKeyAndUser()
+        sendTx(cmds.createAsset(program.key, program.me, name, ticker, supply, precision))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ xfer-create-asset TIESOFBLOOD TOB 10000000 3 -F key.json -M alice')
+    })
+
+
+program.command('issue-asset <receiver> <amount> <asset> [memo]')
+    .alias('xfer-issue-asset')
+    .description('issue asset')
+    .action(function(receiver, amount, asset, memo) {
+        verifyKeyAndUser()
+        sendTx(cmds.issueAsset(program.key, program.me, receiver, amount, asset, memo))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ xfer-issue-asset TIESOFBLOOD TOB 10000000 3 -F key.json -M alice')
+    })    
+
+
 program.command('buy <price> <amount> <asset>')
     .description('put a buy order for an asset')
     .action(function(price, amount, asset) {

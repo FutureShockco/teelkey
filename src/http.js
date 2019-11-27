@@ -476,7 +476,13 @@ var http = {
                 res.sendStatus(404)
             })
         })
-
+        // get assets
+        app.get('/assets', (req, res) => {
+            db.collection('assets').find({}, {sort: {}, limit: 200}).toArray(function(err, assets) {
+                if (!assets) res.sendStatus(404)
+                else res.send(assets)
+            })
+        })
         
         // get buy orders for an asset
         app.get('/buy/:asset', (req, res) => {

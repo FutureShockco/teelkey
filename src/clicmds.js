@@ -190,8 +190,22 @@ let cmds = {
         return sign(privKey, sender, tx)
     },
     //24
+    createAsset: (privKey, sender, name, ticker, supply, precision) => {
+        var tx = '{"type":24,"data":{"name":"'+name+'","ticker":"'+ticker+'", "supply":'
+        + parseInt(supply)+', "precision":'+ parseInt(precision)+'}}'
+        return sign(privKey, sender, tx)
+    },
+    //25
+    issueAsset: (privKey, sender, receiver, amount, asset, memo) => {
+        if (!memo) memo=''
+        var tx = '{"type":25,"data":{"receiver":"'+
+			receiver+'", "amount":'+
+			parseInt(amount)+', "asset":"'+asset+'", "memo":"'+memo+'"}}'
+        return sign(privKey, sender, tx)
+    },
+    //26
     masterJson: (privKey, sender, memo) => {
-        var tx = '{"type":24,"data":{"memo":"'+memo+'"}}'
+        var tx = '{"type":26,"data":{"memo":"'+memo+'"}}'
         return sign(privKey, sender, tx)
     },
 }
