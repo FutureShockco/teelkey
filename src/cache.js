@@ -5,23 +5,24 @@ var cache = {
         accounts: {},
         contents: {},
         distributed: {},
+        assets: {},
+        market: {},
+        nft_market: {},
+        market_history: {},
         changes: [],
         inserts: [],
-        removes: [],
-        market: [],
-        nft_market: [],
-        market_history: []
-
+        removes: []
     },
     accounts: {},
     contents: {},
     distributed: {},
+    assets: {},
+    market: {},
+    nft_market: {},
+    market_history: {},
     changes: [],
     inserts: [],
     removes: [],
-    market: [],
-    nft_market: [],
-    market_history: [],
     rollback: function() {
         for (const key in cache.copy.accounts)
             cache.accounts[key] = cloneDeep(cache.copy.accounts[key])
@@ -40,21 +41,24 @@ var cache = {
         for (const key in cache.copy.nft_market)
             cache.nft_market[key] = cloneDeep(cache.copy.nft_market[key])  
         for (const key in cache.copy.market)
-            cache.market_history[key] = cloneDeep(cache.copy.market_history[key])   
+            cache.market_history[key] = cloneDeep(cache.copy.market_history[key])  
+        for (const key in cache.copy.assets)
+            cache.assets[key] = cloneDeep(cache.copy.assets[key])    
         cache.copy.accounts = {}
         cache.copy.contents = {}
         cache.copy.distributed = {}
+        cache.copy.assets = {}
+        cache.copy.market = {}
+        cache.copy.nft_market = {}
+        cache.copy.market_history = {}
         cache.copy.changes = []
         cache.copy.inserts = []
         cache.copy.removes = []
-        cache.copy.market = []
-        cache.copy.nft_market = []
-        cache.copy.market_history = []
         eco.nextBlock()
         //logr.trace('Cache rollback\'d')
     },
     findOne: function(collection, query, cb) {
-        if (['accounts','blocks','contents','market','nft_market','market_history'].indexOf(collection) === -1) {
+        if (['accounts','blocks','contents','assets','market','nft_market','market_history'].indexOf(collection) === -1) {
             cb(true)
             return
         }
@@ -84,7 +88,7 @@ var cache = {
         })
     },
     find: function(collection, query, sort, cb) {
-        if (['market','nft_market','market_history'].indexOf(collection) === -1) {
+        if (['assets','market','nft_market','market_history'].indexOf(collection) === -1) {
             cb(true)
             return
         }
@@ -210,6 +214,7 @@ var cache = {
         cache.accounts = {}
         cache.contents = {}
         cache.distributed = {}
+        cache.assets = {}
         cache.market = {}
         cache.nft_market = {}
         cache.market_history = {}
@@ -245,6 +250,7 @@ var cache = {
             accounts: {},
             contents: {},
             distributed: {},
+            assets: {},
             market: {},
             nft_market: {},
             market_history: {}
@@ -289,12 +295,13 @@ var cache = {
             cache.copy.accounts = {}
             cache.copy.contents = {}
             cache.copy.distributed = {}
+            cache.copy.market = {}
+            cache.copy.assets = {}
+            cache.copy.nft_market = {}
+            cache.copy.market_history = {}
             cache.copy.changes = []
             cache.copy.inserts = []
             cache.copy.removes = []
-            cache.copy.market = []
-            cache.copy.nft_market = []
-            cache.copy.market_history = []
         })
     },
     keyByCollection: function(collection) {
