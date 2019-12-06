@@ -19,7 +19,7 @@ module.exports = {
 
         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
             if (err) throw err
-            if (!account.assets[tx.data.asset] || account.assets[tx.data.asset] < tx.data.amount) {
+            if (!account || !account.assets || !account.assets[tx.data.asset] || account.assets[tx.data.asset] < tx.data.amount) {
                 cb(false, 'invalid tx not enough ' + tx.data.asset + ' balance'); return
             }
             cache.findOne('accounts', { name: tx.data.receiver }, function (err, account) {
