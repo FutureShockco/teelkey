@@ -13,14 +13,14 @@ module.exports = {
         if (!validate.integer(tx.data.precision, true, false, config.assetMaxPrecision)) {
             cb(false, 'invalid tx data.precision'); return
         }
-        cache.findOne('assets', { name: tx.data.asset }, function (err, asset) {
+        cache.findOne('assets', { name: tx.data.name }, function (err, asset) {
             if (err) throw err
-            if (asset) {
-                cb(false, 'invalid tx ' + tx.data.asset + ' already exist'); return
+            if (asset && asset.name === tx.data.name) {
+                cb(false, 'invalid tx ' + tx.data.name + ' already exist'); return
             }
-            cache.findOne('assets', { symbol: tx.data.ticker }, function (err, ticker) {
+            else cache.findOne('assets', { symbol: tx.data.ticker }, function (err, asset) {
                 if (err) throw err
-                if (ticker) {
+                if (asset && asset.symbol === tx.data.ticker) {
                     cb(false, 'invalid tx ' + tx.data.ticker + ' already exist'); return
                 }
                 cache.findOne('accounts', { name: tx.sender }, function (err, account) {

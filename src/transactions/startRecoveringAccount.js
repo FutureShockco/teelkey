@@ -1,5 +1,5 @@
 module.exports = {
-    fields: ['name','pub'],
+    fields: ['name'],
     validate: (tx, ts, legitUser, cb) => {
         if (!validate.string(tx.data.name, config.accountMaxLength, config.accountMinLength, config.allowedUsernameChars, config.allowedUsernameCharsOnlyMiddle)) {
             cb(false, 'invalid tx data.name'); return
@@ -9,17 +9,14 @@ module.exports = {
         }
         cache.findOne('accounts', { name: tx.data.name }, function (err, account) {
             if (err) throw err
-            if (!account.recovering) {
-                cb(false, 'invalid tx you can not recover an account which is not in recovering mode'); return
-            }
-            if (account.recovery !== tx.sender) {
-                cb(false, 'invalid tx you are not set as recovery account'); return
+            if (tx.data.name !== tx.sender) {
+                cb(false, 'invalid tx you are not the account owner'); return
             }
             else cb(true)
         })
     },
     execute: (tx, ts, cb) => {
-        cache.updateOne('accounts', {name: tx.data.name}, {$set: {pub: tx.data.pub}}, function() {
+        cache.updateOne('accounts', {name: tx.data.name}, {$set: {recovering: true}}, function() {
             cb(true)
         })
     }
