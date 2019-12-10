@@ -225,8 +225,8 @@ var cache = {
         //todo resolve all expired orders for market
 
         //todo resolve all expired orders for nft_market
-
-        // executing the inserts (new comment / new account)
+        
+        // executing the inserts (new comment / new account / new asset)
         for (let i = 0; i < cache.inserts.length; i++)
             executions.push(function(callback) {
                 var insert = cache.inserts[i]
@@ -308,7 +308,8 @@ var cache = {
         switch (collection) {
         case 'accounts':
             return 'name'
-        
+        case 'assets':
+            return 'name'
         default:
             return '_id'
         }

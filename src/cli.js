@@ -173,6 +173,23 @@ program.command('password <pub>')
         writeLine('  $ change-recovery bob -F key.json -M alice')
     })
 
+    program.command('start-recovery <user>')
+    .description('switch to recovery mode')
+    .action(function(user) {
+        verifyKeyAndUser()
+        sendTx(cmds.startRecovering(program.key, program.me, user))
+    }).on('--help', function(){
+        writeLine('')
+        writeLine('Arguments:')
+        writeLine('  <user>: the account name to that can recover your account')
+        writeLine('')
+        writeLine('WARNING:')
+        writeLine('  DO NOT change this if you are not sure!')
+        writeLine('')
+        writeLine('Example:')
+        writeLine('  $ start-recovery bob -F key.json -M bob')
+    })
+
     program.command('recover <user> <pub>')
     .description('recover and change user master key')
     .action(function(user, pub) {

@@ -12,12 +12,14 @@ var config = {
             assetMinLength: 3,
             assetMaxLength: 7,
             assetNameAlphabet: '123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
-            assetSymbolAlphabet: 'ABCDEFGHJKLMNOPQRSTUVWXYZ',
+            assetSymbolAlphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
             assetCreationFee : 100,
             assetMaxPrecision : 8,
             nftMinLength: 3,
             nftMaxLength: 50,
             nftAlphabet: '123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
+            // market order expiration time in ms 86400000 = 1 day - 259200000 = 3 days - 604800000 = 1 week
+            marketExpirationTime: 604800000,
             // allowed username chars
             allowedUsernameChars: 'abcdefghijklmnopqrstuvwxyz0123456789',
             allowedUsernameCharsOnlyMiddle: '-.',
