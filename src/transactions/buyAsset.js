@@ -12,7 +12,7 @@ module.exports = {
         }
         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
             if (err) throw err
-            if (account.balance < (tx.data.amount * tx.data.price)) {
+            if (!account || account.balance < (tx.data.amount * tx.data.price)) {
                 cb(false, 'invalid tx not enough balance'); return
             }
             else cb(true)

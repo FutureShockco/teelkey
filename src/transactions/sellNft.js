@@ -12,8 +12,8 @@ module.exports = {
         }
         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
             if (err) throw err
-            if (!account.nfts.includes(tx.data.id)) {
-                cb(false, 'invalid tx not enough ' + tx.data.id + ' balance'); return
+            if (!account || !account.nfts || !account.nfts.includes(tx.data.id)) {
+                cb(false, 'invalid tx can not find ' + tx.data.id + ' balance'); return
             }
             else cb(true)
         })

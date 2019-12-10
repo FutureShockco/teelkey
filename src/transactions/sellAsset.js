@@ -12,7 +12,7 @@ module.exports = {
         }
         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
             if (err) throw err
-            if (!account.assets[tx.data.asset] || account.assets[tx.data.asset] < (tx.data.amount)) {
+            if (!account || !account.assets || !account.assets[tx.data.asset] || account.assets[tx.data.asset] < (tx.data.amount)) {
                 cb(false, 'invalid tx not enough asset'); return
             }
             else cb(true)
@@ -25,11 +25,10 @@ module.exports = {
         let sort = { price: -1, created:1 }
         //remove asset from the seller
         cache.findOne('accounts', { name: tx.sender }, function (err, account) {
-            var assets = account.assets || {};
-            assets[tx.data.asset] -= amount;
+            var assets = account.assets;
             cache.updateOne('accounts',
                 { name: tx.sender },
-                { $set: { assets: assets } },
+                { $set: { assets: assets[tx.data.asset] -= amount } },
                 function () {
                     //check for market if existent orders exists then process
                     cache.find('market', query , sort , function (err, orders) {
