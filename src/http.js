@@ -23,7 +23,6 @@ let sign = (privKey, sender, tx) => {
     // add timestamp to seed the hash (avoid transactions reuse)
     tx.sender = sender
     tx.ts = new Date().getTime()
-    console.log('before signing', tx)
     var txString = JSON.stringify(tx)
     // hash the transaction
     tx.hash = CryptoJS.SHA256(txString).toString()
@@ -36,7 +35,6 @@ let sign = (privKey, sender, tx) => {
 
     // convert signature to base58
     tx.signature = bs58.encode(signature.signature)
-    console.log('end signing',tx)
 
     return tx
 }
@@ -108,7 +106,6 @@ var http = {
                 console.log('tx not signed')
                 tx = sign(tx.wif,tx.sender,tx)
             }
-            console.log(tx)
             transaction.isValid(tx, new Date().getTime(), function(isValid, errorMessage) {
                 if (!isValid) {
                     logr.trace('invalid http tx: ', errorMessage, tx)
