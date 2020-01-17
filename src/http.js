@@ -6,9 +6,38 @@ const {extract} = require('oembed-parser')
 const ogs = require('open-graph-scraper')
 const series = require('run-series')
 const transaction = require('./transaction.js')
+var CryptoJS = require('crypto-js')
+const secp256k1 = require('secp256k1')
+const bs58 = require('base-x')(config.b58Alphabet)
 
 var path = require('path');
 var public = path.join(__dirname, '../public');
+
+let sign = (privKey, sender, tx) => {
+    // parsing the tx
+    try {
+        tx = JSON.parse(tx)
+    } catch (error) {
+        console.log(error)
+    }
+    // add timestamp to seed the hash (avoid transactions reuse)
+    tx.sender = sender
+    tx.ts = new Date().getTime()
+    var txString = JSON.stringify(tx)
+    // hash the transaction
+    tx.hash = CryptoJS.SHA256(txString).toString()
+
+    // decode the key
+    var rawPriv = bs58.decode(privKey)
+
+    // sign the tx
+    var signature = secp256k1.sign(Buffer.from(tx.hash, 'hex'), rawPriv)
+
+    // convert signature to base58
+    tx.signature = bs58.encode(signature.signature)
+
+    return tx
+}
 
 var http = {
     init: () => {
@@ -72,14 +101,21 @@ var http = {
                 res.sendStatus(500)
                 return
             }
+            if(!tx.ts)
+            {
+                console.log('tx not signed')
+                tx = sign(tx.wif,tx.sender,tx)
+            }
             transaction.isValid(tx, new Date().getTime(), function(isValid, errorMessage) {
                 if (!isValid) {
                     logr.trace('invalid http tx: ', errorMessage, tx)
                     res.status(500).send({error: errorMessage})
+                    return
                 } else {
                     p2p.broadcast({t:5, d:tx})
                     transaction.addToPool([tx])
                     res.send(chain.getLatestBlock()._id.toString())
+                    return
                 }
             })
         })
