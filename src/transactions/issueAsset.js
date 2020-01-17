@@ -13,10 +13,15 @@ module.exports = {
         if (!validate.string(tx.data.asset, config.assetMaxLength, config.assetMinLength, config.assetSymbolAlphabet, '')) {
             cb(false, 'invalid tx data.asset'); return
         }
+        cache.findOne('accounts', {name: tx.data.receiver}, function(err, account) {
+            if (err) throw err
+            if (!account)
+                cb(false, 'invalid tx receive account does not exist')
+        })
         cache.findOne('assets', { symbol: tx.data.asset, issuer: tx.sender }, function (err, asset) {
             if (err) throw err
             if (!asset || (asset.issued + tx.data.amount) > asset.supply) {
-                cb(false, 'invalid tx can not issue ' + tx.data.asset + ' '); return
+                cb(false, 'invalid tx can not issue ' + tx.data.asset + ' exceeds max supply'); return
             }
             else cb(true)
         })
@@ -32,17 +37,14 @@ module.exports = {
                 { name: tx.data.receiver },
                 { $set: { assets: assets } },
                 function () {
-                    // remove funds from sender
-                    cache.findOne('assets', { symbol: tx.data.asset, issuer: tx.sender }, function (err, asset) {
-                        asset.issued += tx.data.amount
+                    // issue assets from asset
                         cache.updateOne('assets',
-                            { _id: asset._id },
-                            { $set: asset },
+                            { symbol: tx.data.asset },
+                            { $inc: {issued: tx.data.amount} },
                             function () {
                                 cb(true)
                             }
                         )
-                    })
                 })
         })
     }

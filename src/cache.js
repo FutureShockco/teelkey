@@ -88,7 +88,7 @@ var cache = {
         })
     },
     find: function(collection, query, sort, cb) {
-        if (['assets','market','nft_market','market_history'].indexOf(collection) === -1) {
+        if (['assets','market','nft_market','market_history','assets'].indexOf(collection) === -1) {
             cb(true)
             return
         }
@@ -111,7 +111,6 @@ var cache = {
                 cb(null, false); return
             }
             var key = cache.keyByCollection(collection)
-
             if (!cache.copy[collection][obj[key]])
                 cache.copy[collection][obj[key]] = cloneDeep(cache[collection][obj[key]])
             
@@ -152,9 +151,11 @@ var cache = {
                     break
 
                 case '$set':
-                    for (var s in changes[c]) 
-                        cache[collection][obj[key]][s] = changes[c][s]
-                    
+                    for (var s in changes[c])
+                            console.log(cache[collection][obj[key]][s])
+
+                            console.log(changes[c][s])
+                            cache[collection][obj[key]][s] = changes[c][s]
                     break
                 
                 default:
@@ -261,7 +262,7 @@ var cache = {
             var key = change.query[cache.keyByCollection(collection)]
             docsToUpdate[collection][key] = cache[collection][key]
         }
-
+        console.log('toupdate',docsToUpdate)
         for (const col in docsToUpdate) 
             for (const i in docsToUpdate[col]) 
                 executions.push(function(callback) {
@@ -274,6 +275,7 @@ var cache = {
                         callback()
                     })
                 })
+
 
         // no operation compression (dumb and slow)
         // for (let i = 0; i < cache.changes.length; i++) {
@@ -309,7 +311,7 @@ var cache = {
         case 'accounts':
             return 'name'
         case 'assets':
-            return 'name'
+            return 'symbol'
         default:
             return '_id'
         }

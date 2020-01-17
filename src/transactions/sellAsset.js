@@ -28,7 +28,7 @@ module.exports = {
             var assets = account.assets;
             cache.updateOne('accounts',
                 { name: tx.sender },
-                { $set: { assets: assets[tx.data.asset] -= amount } },
+                { $inc: { assets: assets[tx.data.asset] -= amount } },
                 function () {
                     //check for market if existent orders exists then process
                     cache.find('market', query , sort , function (err, orders) {

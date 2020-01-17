@@ -7,7 +7,9 @@ module.exports = {
         if (!validate.publicKey(tx.data.pub, config.accountMaxLength)) {
             cb(false, 'invalid tx data.pub'); return
         }
-
+        if (tx.data.json && !validate.json(tx.data.json, config.jsonMaxBytes)) {
+            cb(false, 'invalid tx data.json'); return
+        }
         var lowerUser = tx.data.name.toLowerCase()
 
         for (let i = 0; i < lowerUser.length; i++) {
@@ -39,6 +41,7 @@ module.exports = {
         })
     },
     execute: (tx, ts, cb) => {
+        // set new account configuration
         cache.insertOne('accounts', {
             name: tx.data.name.toLowerCase(),
             created:ts,
@@ -53,9 +56,11 @@ module.exports = {
             keys: [],
             recovery: config.masterName,
             recovering : false,
+            json:tx.data.json || null
         }, function(){
             if (tx.data.name !== tx.data.pub.toLowerCase()) 
                 if (tx.sender !== config.masterName || config.masterPaysForUsernames) {
+                    //update sender account balance
                     cache.updateOne('accounts', 
                         {name: tx.sender},
                         {$inc: {balance: -eco.accountPrice(tx.data.name)}}, function() {
