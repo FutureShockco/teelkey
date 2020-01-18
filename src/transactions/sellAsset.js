@@ -19,7 +19,7 @@ module.exports = {
         })
     },
     execute: (tx, ts, cb) => {
-        // check buy order in market*
+        // check buy order in market
         let amount = tx.data.amount;
         let query = { $and: [{ amount: { $gte: 1 } }, { price: { $gte: tx.data.price } }, { asset: tx.data.asset, type: "buy" }]}
         let sort = { price: -1, created:1 }
