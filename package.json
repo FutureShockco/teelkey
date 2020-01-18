@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "base-x": "^3.0.5",
+    "big-integer": "^1.6.48",
     "body-parser": "^1.15.2",
     "clone-deep": "^4.0.1",
     "commander": "^2.20.0",
@@ -20,6 +21,7 @@
     "ethereumjs-vm": "^4.1.1",
     "express": "^4.16.4",
     "growint": "^1.0.1",
+    "hash.js": "^1.1.7",
     "log4js": "^3.0.6",
     "mongodb": "^3.2.2",
     "node-fetch": "^2.3.0",

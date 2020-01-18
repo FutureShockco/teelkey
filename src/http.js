@@ -6,6 +6,7 @@ const {extract} = require('oembed-parser')
 const ogs = require('open-graph-scraper')
 const series = require('run-series')
 const transaction = require('./transaction.js')
+const random = require('./random.js')
 var CryptoJS = require('crypto-js')
 const secp256k1 = require('secp256k1')
 const bs58 = require('base-x')(config.b58Alphabet)
@@ -578,6 +579,26 @@ var http = {
             ogs({url: req.params.url, headers: {'user-agent': 'facebookexternalhit/1.1 (+https://d.tube)'}}, function (error, results) {
                 if (error) res.sendStatus(404)
                 else res.send(results)
+            })
+        })
+
+        // fetch a single block
+        app.get('/checkseed/:number/:hash', (req, res) => {
+            var blockNumber = parseInt(req.params.number)
+            var hash = req.params.hash
+            db.collection('blocks').findOne({_id: blockNumber}, function(err, block) {
+                if (err) throw err
+                if (!block) {
+                    res.sendStatus(404)
+                    return
+                }
+                random.checkseed(block, hash, function(randomhash) {
+                    if (!randomhash) {
+                        res.sendStatus(404)
+                        return
+                    }
+                    res.send(randomhash)
+                })
             })
         })
 
