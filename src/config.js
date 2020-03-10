@@ -19,7 +19,7 @@ var config = {
             nftMaxLength: 50,
             nftAlphabet: '123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
             // market order expiration time in ms 86400000 = 1 day - 259200000 = 3 days - 604800000 = 1 week
-            marketExpirationTime: 604800000,
+            marketExpirationTime: 120400,
             // allowed username chars
             allowedUsernameChars: 'abcdefghijklmnopqrstuvwxyz0123456789',
             allowedUsernameCharsOnlyMiddle: '-.',
@@ -64,6 +64,8 @@ var config = {
             // masterFee = 9 => <10% fee
             // masterFee = 19 => <5% fee
             masterFee: 9,
+            // the init account default network
+            networkName :'teelkey',
             // the init account username
             masterName: 'master',
             // if false master can create accounts with usernames without burning tokens
@@ -100,7 +102,11 @@ var config = {
             txLimits: {
                 0: 2,
                 14: 2,
-                15: 2
+                15: 2,
+                23: 2,
+                24: 2,
+                25: 2,
+                26: 2
             },
             // the number of ms needed for 0.01 DTC to generate 1 vt
             vtGrowth: 360000000, // +1 vt per hour per DTC

@@ -56,7 +56,7 @@ module.exports = {
             keys: [],
             recovery: config.masterName,
             recovering : false,
-            json:tx.data.json || null
+            json:tx.data.json || {}
         }, function(){
             if (tx.data.name !== tx.data.pub.toLowerCase()) 
                 if (tx.sender !== config.masterName || config.masterPaysForUsernames) {

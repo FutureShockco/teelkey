@@ -8,7 +8,6 @@ var cache = {
         assets: {},
         market: {},
         nft_market: {},
-        market_history: {},
         changes: [],
         inserts: [],
         removes: []
@@ -19,7 +18,6 @@ var cache = {
     assets: {},
     market: {},
     nft_market: {},
-    market_history: {},
     changes: [],
     inserts: [],
     removes: [],
@@ -40,8 +38,6 @@ var cache = {
             cache.market[key] = cloneDeep(cache.copy.market[key])   
         for (const key in cache.copy.nft_market)
             cache.nft_market[key] = cloneDeep(cache.copy.nft_market[key])  
-        for (const key in cache.copy.market)
-            cache.market_history[key] = cloneDeep(cache.copy.market_history[key])  
         for (const key in cache.copy.assets)
             cache.assets[key] = cloneDeep(cache.copy.assets[key])    
         cache.copy.accounts = {}
@@ -50,7 +46,6 @@ var cache = {
         cache.copy.assets = {}
         cache.copy.market = {}
         cache.copy.nft_market = {}
-        cache.copy.market_history = {}
         cache.copy.changes = []
         cache.copy.inserts = []
         cache.copy.removes = []
@@ -58,7 +53,7 @@ var cache = {
         //logr.trace('Cache rollback\'d')
     },
     findOne: function(collection, query, cb) {
-        if (['accounts','blocks','contents','assets','market','nft_market','market_history'].indexOf(collection) === -1) {
+        if (['accounts','blocks','contents','assets','market','nft_market'].indexOf(collection) === -1) {
             cb(true)
             return
         }
@@ -78,6 +73,12 @@ var cache = {
                     // doesnt exist
                     cb(); return
                 }
+                // if no id check by query
+                if (!query[key] && cache[collection][obj[key]]) {
+                    let res = cloneDeep(cache[collection][obj[key]])
+                    cb(null, res)
+                    return
+                }
                 // found, adding to cache
                 cache[collection][obj[key]] = obj
 
@@ -88,8 +89,14 @@ var cache = {
         })
     },
     find: function(collection, query, sort, cb) {
-        if (['assets','market','nft_market','market_history','assets'].indexOf(collection) === -1) {
+        if (['assets','market','nft_market','assets'].indexOf(collection) === -1) {
             cb(true)
+            return
+        }
+        // search items in cache
+        if (cache[collection] && cache[collection].length>0) {
+            let res = cloneDeep(cache[collection])
+            cb(null, res)
             return
         }
         // searching in mongodb
@@ -152,9 +159,7 @@ var cache = {
 
                 case '$set':
                     for (var s in changes[c])
-                            console.log(cache[collection][obj[key]][s])
 
-                            console.log(changes[c][s])
                             cache[collection][obj[key]][s] = changes[c][s]
                     break
                 
@@ -174,7 +179,6 @@ var cache = {
         var key = cache.keyByCollection(collection)
         if (!query[key] || !query[key]['$in']) 
             throw 'updateMany requires a $in operator'
-        
 
         var indexesToUpdate = query[key]['$in']
         var executions = []
@@ -218,15 +222,9 @@ var cache = {
         cache.assets = {}
         cache.market = {}
         cache.nft_market = {}
-        cache.market_history = {}
     },
     writeToDisk: function(cb) {
         var executions = []
-
-        //todo resolve all expired orders for market
-
-        //todo resolve all expired orders for nft_market
-        
         // executing the inserts (new comment / new account / new asset)
         for (let i = 0; i < cache.inserts.length; i++)
             executions.push(function(callback) {
@@ -253,8 +251,7 @@ var cache = {
             distributed: {},
             assets: {},
             market: {},
-            nft_market: {},
-            market_history: {}
+            nft_market: {}
         }
         for (let i = 0; i < cache.changes.length; i++) {
             var change = cache.changes[i]
@@ -262,7 +259,6 @@ var cache = {
             var key = change.query[cache.keyByCollection(collection)]
             docsToUpdate[collection][key] = cache[collection][key]
         }
-        console.log('toupdate',docsToUpdate)
         for (const col in docsToUpdate) 
             for (const i in docsToUpdate[col]) 
                 executions.push(function(callback) {
@@ -300,7 +296,6 @@ var cache = {
             cache.copy.market = {}
             cache.copy.assets = {}
             cache.copy.nft_market = {}
-            cache.copy.market_history = {}
             cache.copy.changes = []
             cache.copy.inserts = []
             cache.copy.removes = []
